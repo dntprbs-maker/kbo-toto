@@ -3,16 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>⚾ KBO 토토   투자기록부 2026</title>
+<title>⚾ KBO 토토 투자기록부 2026</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&display=swap');
 
 :root {
-  --bg: #0a0f1e; --bg2: #111827; --card: #1a2235; --border: #1e3250;
-  --gold: #f5a623; --gold2: #ffd166; --green: #06d6a0; --red: #ef476f;
-  --blue: #118ab2; --gray: #6b7280; --light: #e2e8f0; --white: #ffffff;
-  --h-header: 52px; --h-tabs: 46px;
+  --bg: #0a0f1e;
+  --bg2: #111827;
+  --card: #1a2235;
+  --border: #1e3250;
+  --gold: #f5a623;
+  --gold2: #ffd166;
+  --green: #06d6a0;
+  --red: #ef476f;
+  --blue: #118ab2;
+  --gray: #6b7280;
+  --light: #e2e8f0;
+  --white: #ffffff;
+  --h-header: 52px;
+  --h-tabs:   46px;
+  --h-filter: 60px;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--light); min-height: 100vh; }
 header { background: linear-gradient(135deg, #060d1a 0%, #0f1f3d 100%); border-bottom: 2px solid var(--gold); padding: 14px 20px; position: sticky; top: 0; z-index: 100; height: var(--h-header); box-sizing: border-box; }
@@ -33,11 +45,11 @@ main { max-width: 100%; margin: 0 auto; padding: 0 12px 60px; overflow-x: hidden
 .kpi-label { font-size: 11px; color: var(--gray); margin-bottom: 4px; }
 .kpi-val { font-size: 20px; font-weight: 900; }
 .kpi-val.gold { color: var(--gold); } .kpi-val.green { color: var(--green); } .kpi-val.red { color: var(--red); }
-.bet-compare { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.bet-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
 .bet-type-card { background: var(--card); border-radius: 12px; padding: 16px; border: 2px solid transparent; }
-.bet-type-card.unanimous { border-color: var(--gold); } .bet-type-card.allfive { border-color: var(--blue); } .bet-type-card.single { border-color: var(--green); }
+.bet-type-card.unanimous { border-color: var(--gold); } .bet-type-card.allfive { border-color: var(--blue); }
 .bet-type-title { font-size: 13px; font-weight: 900; margin-bottom: 12px; }
-.bet-type-card.unanimous .bet-type-title { color: var(--gold); } .bet-type-card.allfive .bet-type-title { color: #5ba8ff; } .bet-type-card.single .bet-type-title { color: var(--green); }
+.bet-type-card.unanimous .bet-type-title { color: var(--gold); } .bet-type-card.allfive .bet-type-title { color: #5ba8ff; }
 .bet-stat { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); }
 .bet-stat:last-child { border-bottom: none; } .bet-stat-label { color: var(--gray); } .bet-stat-val { font-weight: 700; }
 .pos { color: var(--green); } .neg { color: var(--red); } .neu { color: var(--gray); }
@@ -54,6 +66,7 @@ main { max-width: 100%; margin: 0 auto; padding: 0 12px 60px; overflow-x: hidden
 .games-table { width: 100%; border-collapse: collapse; font-size: 11px; white-space: nowrap; }
 .games-table .th-group { font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 4px 6px; text-align: center; border-bottom: none; }
 .games-table .th-group.group-match { background: transparent; } .games-table .th-group.group-ai { background: rgba(91,168,255,0.12); color: #5ba8ff; border-radius: 4px 4px 0 0; }
+.games-table .th-group.group-pick { background: rgba(245,166,35,0.10); } .games-table .th-group.group-result { background: rgba(6,214,160,0.10); }
 .games-table th { font-size: 10px; font-weight: 700; padding: 6px 8px; text-align: center; border-bottom: 2px solid var(--border); white-space: nowrap; }
 .games-table th.col-match { background: rgba(255,255,255,0.04); color: var(--light); text-align: left; padding-left: 20px; border-right: 1px solid var(--border); }
 .games-table th.col-ai1 { background: rgba(91,168,255,0.10); color: #7ec8ff; } .games-table th.col-ai2 { background: rgba(91,168,255,0.14); color: #5ba8ff; }
@@ -83,16 +96,24 @@ main { max-width: 100%; margin: 0 auto; padding: 0 12px 60px; overflow-x: hidden
 .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
 canvas { width: 100% !important; }
 .empty { text-align: center; padding: 40px; color: var(--gray); font-size: 13px; }
-.bet-filter-wrap { display: flex; gap: 8px; margin-bottom: 16px; position: sticky; top: calc(var(--h-header) + 46px); z-index: 80; background: var(--bg2); padding: 8px 0; }
+.bet-filter-wrap {
+  display: flex; gap: 8px; margin-bottom: 16px;
+  position: sticky;
+  top: calc(var(--h-header) + 46px);
+  z-index: 80;
+  background: var(--bg2);
+  padding: 8px 0;
+}
 .btn-filter { flex: 1; padding: 10px; font-size: 12px; font-weight: 700; background: var(--card); border: 1px solid var(--border); color: var(--gray); border-radius: 8px; cursor: pointer; transition: all .2s; text-align: center; }
 .btn-filter.active.unanimous { border-color: var(--gold); color: var(--gold); background: rgba(245,166,35,0.05); }
 .btn-filter.active.allfive { border-color: #5ba8ff; color: #5ba8ff; background: rgba(91,168,255,0.05); }
-.btn-filter.active.single { border-color: var(--green); color: var(--green); background: rgba(6,214,160,0.05); }
 .bet-content-panel { display: none; } .bet-content-panel.active { display: block; }
 .bet-card-header-row1 { display: flex; align-items: center; justify-content: space-between; }
 .bet-card-summary-row { display: block; margin-top: 4px; }
 .bet-pc-header { display: none; }
-@media (min-width: 600px) { .bet-card-summary-row { display: flex; align-items: center; flex: 1; margin-top: 0; gap: 8px; } }
+@media (min-width: 600px) {
+  .bet-card-summary-row { display: flex; align-items: center; flex: 1; margin-top: 0; gap: 8px; }
+}
 @media (min-width: 1024px) {
   .header-inner, .tabs, main { max-width: 66vw; margin: 0 auto; }
   .bet-filter-wrap { display: none !important; }
@@ -100,12 +121,17 @@ canvas { width: 100% !important; }
   .bet-content-panel { display: block !important; flex: 1; min-width: 0; }
   .bet-pc-header { display: block; font-size: 15px; font-weight: 900; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); color: var(--gold); }
   #panel-allfive .bet-pc-header { color: #5ba8ff; border-bottom-color: #5ba8ff; }
-  #panel-single .bet-pc-header { color: var(--green); border-bottom-color: var(--green); }
 }
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div class="logo">⚾ KBO<em>TOTO</em></div><div class="header-sub">2026 한국 프로야구 투자 기록부</div></div></header>
+<header>
+  <div class="header-inner">
+    <div class="logo">⚾ KBO<em>반짝이
+</em></div>
+    <div class="header-sub">2026  프로야구투자 기록부</div>
+  </div>
+</header>
 <div class="tabs">
   <div class="tab active" onclick="showTab('dashboard')">📊 대시보드</div>
   <div class="tab" onclick="showTab('records')">📋 경기기록</div>
@@ -118,45 +144,106 @@ canvas { width: 100% !important; }
     <input type="date" id="end-date" onchange="applyFilters()" onclick="this.showPicker()" style="cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--light);border-radius:4px;padding:4px 6px;outline:none;font-family:inherit;">
     <button onclick="document.getElementById('start-date').value='';document.getElementById('end-date').value='';applyFilters();" style="cursor:pointer;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--gray);border-radius:4px;padding:4px 6px;font-size:11px;margin-left:2px;">초기화</button>
   </div>
-  <div class="panel active" id="tab-dashboard">
-    <div class="sec" style="margin-top:0;">🎯 베팅 전략 성과</div>
-    <div class="bet-compare" id="bet-compare"></div>
-    <div class="sec">📆 종합 투자 현황</div>
-    <div class="kpi-grid" id="kpi-grid"></div>
-    <div class="sec">📈 누적 손익 추이</div>
-    <div class="chart-wrap"><canvas id="chart" height="160"></canvas></div>
+<div class="panel active" id="tab-dashboard">
+  <div class="sec" style="margin-top:0;">🎯 베팅 전략 성과</div>
+  <div class="bet-compare" id="bet-compare"></div>
+  <div class="sec">📆 종합 투자 현황</div>
+  <div class="kpi-grid" id="kpi-grid"></div>
+  <div class="sec">📈 누적 손익 추이</div>
+  <div class="chart-wrap"><canvas id="chart" height="160"></canvas></div>
+</div>
+<div class="panel" id="tab-records"><div id="records-list"></div></div>
+<div class="panel" id="tab-betting">
+  <div class="bet-filter-wrap">
+    <div class="btn-filter active unanimous" id="btn-unanimous" onclick="filterBetType('unanimous')">🎯 만장일치</div>
+    <div class="btn-filter allfive" id="btn-allfive" onclick="filterBetType('allfive')">⚡ 도전경기</div>
   </div>
-  <div class="panel" id="tab-records"><div id="records-list"></div></div>
-  <div class="panel" id="tab-betting">
-    <div class="bet-filter-wrap">
-      <div class="btn-filter active unanimous" id="btn-unanimous" onclick="filterBetType('unanimous')">🎯 만장일치</div>
-      <div class="btn-filter allfive" id="btn-allfive" onclick="filterBetType('allfive')">⚡ 도전경기</div>
-      <div class="btn-filter single" id="btn-single" onclick="filterBetType('single')">1️⃣ 단독베팅</div>
-    </div>
-    <div class="bet-lists-container">
-      <div class="bet-content-panel active" id="panel-unanimous"><div class="bet-pc-header">🎯 만장일치 내역</div><div id="unanimous-list"></div></div>
-      <div class="bet-content-panel" id="panel-allfive"><div class="bet-pc-header">⚡ 도전경기 내역</div><div id="allfive-list"></div></div>
-      <div class="bet-content-panel" id="panel-single"><div class="bet-pc-header">1️⃣ 단독베팅 내역</div><div id="single-list"></div></div>
-    </div>
+  <div class="bet-lists-container">
+    <div class="bet-content-panel active" id="panel-unanimous"><div class="bet-pc-header">🎯 만장일치 내역</div><div id="unanimous-list"></div></div>
+    <div class="bet-content-panel" id="panel-allfive"><div class="bet-pc-header">⚡ 도전경기 내역</div><div id="allfive-list"></div></div>
   </div>
+</div>
 </main>
 <script>
 const DATA=[
-  {date:"2026-06-07",games:[{matchup:"삼성 vs KIA",ai1:"KIA",ai2:"KIA",ai3:"KIA",pick:"KIA",result:"KIA"},{matchup:"한화 vs 롯데",ai1:"한화",ai2:"한화",ai3:"한화",pick:"한화",result:"한화"},{matchup:"LG vs NC",ai1:"NC",ai2:"LG",ai3:"LG",pick:"LG",result:"NC"},{matchup:"KT vs SSG",ai1:"SSG",ai2:"KT",ai3:"KT",pick:"KT",result:"SSG"},{matchup:"키움 vs 두산",ai1:"두산",ai2:"두산",ai3:"두산",pick:"두산",result:"키움"}],unanimousBet:{odds:3.9,amount:100,betResult:"miss"},allFiveBets:[{label:"조합1",odds:10.0,amount:100,betResult:"miss",pickLabels:["KIA","한화","LG","KT","두산"]}]},
-  {date:"2026-06-09",games:[{matchup:"SSG vs LG",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG",result:"LG"},{matchup:"두산 vs 롯데",ai1:"두산",ai2:"두산",ai3:"두산",pick:"두산",result:"두산"},{matchup:"KIA vs 한화",ai1:"한화",ai2:"KIA",ai3:"KIA",pick:"KIA",result:"KIA"},{matchup:"NC vs 키움",ai1:"키움",ai2:"키움",ai3:"NC",pick:"키움",result:"키움"},{matchup:"삼성 vs KT",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT",result:"KT"}],unanimousBet:{odds:3.5,amount:100,betResult:"hit"},allFiveBets:[{label:"조합1",odds:11.9,amount:100,betResult:"hit",pickLabels:["LG승","롯데패","KT승","한화패","키움승"]}]},
-  {date:"2026-06-10",games:[{matchup:"SSG vs LG",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG",result:"LG"},{matchup:"두산 vs 롯데",ai1:"두산",ai2:"두산",ai3:"두산",pick:"두산",result:"롯데"},{matchup:"삼성 vs KT",ai1:"삼성",ai2:"KT",ai3:"KT",pick:"KT",result:"KT"},{matchup:"KIA vs 한화",ai1:"KIA",ai2:"KIA",ai3:"한화",pick:"KIA",result:"한화"},{matchup:"NC vs 키움",ai1:"NC",ai2:"키움",ai3:"NC",pick:"NC",result:"NC"}],unanimousBet:{odds:1.9,amount:100,betResult:"miss",customGames:[{matchup:"SSG vs LG",pick:"LG",result:"LG"},{matchup:"두산 vs 롯데",pick:"두산",result:"롯데"}]},allFiveBets:[{label:"인터넷",odds:10.3,amount:100,betResult:"miss",pickLabels:["LG승","롯데패","KT승","한화패","키움패"]},{label:"판매점A (KT패)",odds:5.6,amount:5000,betResult:"miss",pickLabels:["LG승","롯데패","KT패(삼성승)","한화패(KIA승)","키움패"]},{label:"판매점B (KT승)",odds:7.9,amount:5000,betResult:"miss",pickLabels:["LG승","롯데패","KT승","한화패(KIA승)","키움패"]}]},
-  {date:"2026-06-11",games:[{matchup:"SSG vs LG",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG",result:"LG"},{matchup:"두산 vs 롯데",ai1:"롯데",ai2:"두산",ai3:"두산",pick:"두산",result:"두산"},{matchup:"삼성 vs KT",ai1:"삼성",ai2:"KT",ai3:"KT",pick:"KT",result:"삼성"},{matchup:"KIA vs 한화",ai1:"한화",ai2:"KIA",ai3:"한화",pick:"한화",result:"한화"},{matchup:"NC vs 키움",ai1:"NC",ai2:"키움",ai3:"NC",pick:"NC",result:"NC"}],unanimousBet:{odds:1.6,amount:100,betResult:"hit",customGames:[{matchup:"SSG vs LG",pick:"LG",result:"LG"}]},allFiveBets:[{label:"5경기",odds:13.4,amount:100,betResult:"miss",pickLabels:["LG승","롯데패(두산승)","KT승","한화승","키움패(NC승)"]},{label:"3경기",odds:6.1,amount:100,betResult:"miss",customGames:[{matchup:"SSG vs LG",pick:"LG",result:"LG"},{matchup:"삼성 vs KT",pick:"KT",result:"삼성"},{matchup:"KIA vs 한화",pick:"한화",result:"한화"}]}]},
-  {date:"2026-06-12",games:[{matchup:"롯데 vs LG",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG",result:"롯데"},{matchup:"두산 vs KIA",ai1:"KIA",ai2:"KIA",ai3:"KIA",pick:"KIA",result:"두산"},{matchup:"한화 vs 키움",ai1:"키움",ai2:"키움",ai3:"한화",pick:"키움",result:"키움"},{matchup:"SSG vs 삼성",ai1:"삼성",ai2:"삼성",ai3:"SSG",pick:"삼성",result:"SSG"},{matchup:"NC vs KT",ai1:"NC",ai2:"NC",ai3:"KT",pick:"NC",result:"KT"}],unanimousBet:{odds:1.6,amount:100,betResult:"miss",customGames:[{matchup:"두산 vs KIA",pick:"KIA",result:"두산"}]},allFiveBets:[{label:"3경기",odds:3.3,amount:100,betResult:"miss",customGames:[{matchup:"롯데 vs LG",pick:"LG",result:"롯데"},{matchup:"SSG vs 삼성",pick:"삼성",result:"SSG"},{matchup:"두산 vs KIA",pick:"KIA",result:"두산"}]},{label:"5경기",odds:11.2,amount:100,betResult:"miss",pickLabels:["LG승","삼성승","KIA승","KT패(NC승)","키움승"]}],singleBets:[{matchup:"롯데 vs LG",pick:"LG",odds:1.35,amount:100,betResult:"miss",result:"롯데"},{matchup:"SSG vs 삼성",pick:"삼성",odds:1.51,amount:100,betResult:"miss",result:"SSG"},{matchup:"두산 vs KIA",pick:"KIA",odds:1.60,amount:100,betResult:"miss",result:"두산"},{matchup:"NC vs KT",pick:"NC",odds:1.72,amount:100,betResult:"miss",result:"KT"},{matchup:"한화 vs 키움",pick:"키움",odds:1.99,amount:100,betResult:"hit",result:"키움"}]},
+  {
+    date:"2026-06-07",
+    games:[
+      {matchup:"삼성 vs KIA",  ai1:"KIA", ai2:"KIA", ai3:"KIA", pick:"KIA", result:"KIA"},
+      {matchup:"한화 vs 롯데", ai1:"한화",ai2:"한화",ai3:"한화",pick:"한화",result:"한화"},
+      {matchup:"LG vs NC",     ai1:"NC",  ai2:"LG",  ai3:"LG",  pick:"LG",  result:"NC"},
+      {matchup:"KT vs SSG",    ai1:"SSG", ai2:"KT",  ai3:"KT",  pick:"KT",  result:"SSG"},
+      {matchup:"키움 vs 두산", ai1:"두산",ai2:"두산",ai3:"두산",pick:"두산",result:"키움"},
+    ],
+    unanimousBet:{odds:3.9,amount:100,betResult:"miss"},
+    allFiveBets:[{label:"조합1",odds:10.0,amount:100,betResult:"miss",pickLabels:["KIA","한화","LG","KT","두산"]}],
+  },
+  {
+    date:"2026-06-09",
+    games:[
+      {matchup:"SSG vs LG",   ai1:"LG",   ai2:"LG",   ai3:"LG",   pick:"LG",   result:"LG"},
+      {matchup:"두산 vs 롯데",ai1:"두산", ai2:"두산", ai3:"두산", pick:"두산", result:"두산"},
+      {matchup:"KIA vs 한화", ai1:"한화", ai2:"KIA",  ai3:"KIA",  pick:"KIA",  result:"KIA"},
+      {matchup:"NC vs 키움",  ai1:"키움", ai2:"키움", ai3:"NC",   pick:"키움", result:"키움"},
+      {matchup:"삼성 vs KT",  ai1:"KT",   ai2:"KT",   ai3:"KT",   pick:"KT",   result:"KT"},
+    ],
+    unanimousBet:{odds:3.5,amount:100,betResult:"hit"},
+    allFiveBets:[{label:"조합1",odds:11.9,amount:100,betResult:"hit",pickLabels:["LG승","롯데패","KT승","한화패","키움승"]}],
+  },
+  {
+    date:"2026-06-10",
+    games:[
+      {matchup:"SSG vs LG",   ai1:"LG",   ai2:"LG",   ai3:"LG",   pick:"LG",   result:"LG"},
+      {matchup:"두산 vs 롯데",ai1:"두산", ai2:"두산", ai3:"두산", pick:"두산", result:"롯데"},
+      {matchup:"삼성 vs KT",  ai1:"삼성", ai2:"KT",   ai3:"KT",   pick:"KT",   result:"KT"},
+      {matchup:"KIA vs 한화", ai1:"KIA",  ai2:"KIA",  ai3:"한화", pick:"KIA",  result:"한화"},
+      {matchup:"NC vs 키움",  ai1:"NC",   ai2:"키움", ai3:"NC",   pick:"NC",   result:"NC"},
+    ],
+    unanimousBet:{odds:1.9,amount:100,betResult:"miss",customGames:[{matchup:"SSG vs LG",pick:"LG",result:"LG"},{matchup:"두산 vs 롯데",pick:"두산",result:"롯데"}]},
+    allFiveBets:[
+      {label:"인터넷",odds:10.3,amount:100,betResult:"miss",pickLabels:["LG승","롯데패","KT승","한화패","키움패"]},
+      {label:"판매점A (KT패)",odds:5.6,amount:5000,betResult:"miss",pickLabels:["LG승","롯데패","KT패(삼성승)","한화패(KIA승)","키움패"]},
+      {label:"판매점B (KT승)",odds:7.9,amount:5000,betResult:"miss",pickLabels:["LG승","롯데패","KT승","한화패(KIA승)","키움패"]},
+    ],
+  },
+  {
+    date:"2026-06-11",
+    games:[
+      {matchup:"SSG vs LG",   ai1:"LG",   ai2:"LG",   ai3:"LG",   pick:"LG",   result:"LG"},
+      {matchup:"두산 vs 롯데",ai1:"롯데", ai2:"두산", ai3:"두산", pick:"두산", result:"두산"},
+      {matchup:"삼성 vs KT",  ai1:"삼성", ai2:"KT",   ai3:"KT",   pick:"KT",   result:"삼성"},
+      {matchup:"KIA vs 한화", ai1:"한화", ai2:"KIA",  ai3:"한화", pick:"한화", result:"한화"},
+      {matchup:"NC vs 키움",  ai1:"NC",   ai2:"키움", ai3:"NC",   pick:"NC",   result:"NC"},
+    ],
+    unanimousBet:{odds:1.6,amount:100,betResult:"hit",customGames:[{matchup:"SSG vs LG",pick:"LG",result:"LG"}]},
+    allFiveBets:[
+      {label:"5경기",odds:13.4,amount:100,betResult:"miss",pickLabels:["LG승","롯데패(두산승)","KT승","한화승","키움패(NC승)"]},
+      {label:"3경기",odds:6.1,amount:100,betResult:"miss",customGames:[{matchup:"SSG vs LG",pick:"LG",result:"LG"},{matchup:"삼성 vs KT",pick:"KT",result:"삼성"},{matchup:"KIA vs 한화",pick:"한화",result:"한화"}]},
+    ],
+  },
 ];
 function isUnanimous(g){return g.ai1===g.ai2&&g.ai2===g.ai3;}
 function getUnanimousGames(day){return day.games.filter(g=>isUnanimous(g));}
-function calcBetStatus(games,item){if(item.betResult==='hit'||item.betResult==='miss')return item.betResult;if(games.some(g=>g.result===null))return'pending';return games.every(g=>g.pick===g.result)?'hit':'miss';}
-function getProfit(bet){if(bet.betResult==='pending')return null;if(bet.betResult==='hit')return Math.round(bet.amount*bet.odds-bet.amount);return -bet.amount;}
+function calcBetStatus(games,item){
+  if(item.betResult==='hit'||item.betResult==='miss')return item.betResult;
+  if(games.some(g=>g.result===null))return'pending';
+  return games.every(g=>g.pick===g.result)?'hit':'miss';
+}
+function getProfit(bet){
+  if(bet.betResult==='pending')return null;
+  if(bet.betResult==='hit')return Math.round(bet.amount*bet.odds-bet.amount);
+  return -bet.amount;
+}
 function fmt(v,unit='원'){if(v===null)return'-';return(v>=0?'+':'')+v.toLocaleString()+unit;}
 function getFilteredData(){
   let sDate=document.getElementById('start-date').value;
   let eDate=document.getElementById('end-date').value;
-  if(!sDate||!eDate){const latest=DATA.length?DATA[DATA.length-1].date:new Date().toISOString().split('T')[0];const yyyy_mm=latest.slice(0,7);if(!sDate){sDate=yyyy_mm+'-01';document.getElementById('start-date').value=sDate;}if(!eDate){const parts=yyyy_mm.split('-');const lastDay=new Date(parts[0],parts[1],0).getDate();eDate=yyyy_mm+'-'+String(lastDay).padStart(2,'0');document.getElementById('end-date').value=eDate;}}
+  if(!sDate||!eDate){
+    const latest=DATA.length?DATA[DATA.length-1].date:new Date().toISOString().split('T')[0];
+    const yyyy_mm=latest.slice(0,7);
+    if(!sDate){sDate=yyyy_mm+'-01';document.getElementById('start-date').value=sDate;}
+    if(!eDate){const parts=yyyy_mm.split('-');const lastDay=new Date(parts[0],parts[1],0).getDate();eDate=yyyy_mm+'-'+String(lastDay).padStart(2,'0');document.getElementById('end-date').value=eDate;}
+  }
   return{sDate,eDate,filtered:DATA.filter(d=>d.date>=sDate&&d.date<=eDate)};
 }
 function applyFilters(){renderDashboard();renderRecords();renderBetting();}
@@ -164,52 +251,126 @@ function renderDashboard(){
   const{sDate,eDate,filtered:fd}=getFilteredData();
   const uBets=fd.map(d=>d.unanimousBet).filter(b=>b&&b.betResult!=='pending');
   const a5Bets=fd.flatMap(d=>d.allFiveBets||[]).filter(b=>b.betResult!=='pending');
-  const sBets=fd.flatMap(d=>d.singleBets||[]).filter(b=>b.betResult!=='pending');
-  const totalBet=fd.reduce((s,d)=>{let t=d.unanimousBet?d.unanimousBet.amount:0;t+=(d.allFiveBets||[]).reduce((a,b)=>a+b.amount,0);t+=(d.singleBets||[]).reduce((a,b)=>a+b.amount,0);return s+t;},0);
-  const totalProfit=[...uBets,...a5Bets,...sBets].reduce((s,b)=>s+(getProfit(b)||0),0);
+  const totalBet=fd.reduce((s,d)=>{let t=d.unanimousBet?d.unanimousBet.amount:0;t+=(d.allFiveBets||[]).reduce((a,b)=>a+b.amount,0);return s+t;},0);
+  const totalProfit=[...uBets,...a5Bets].reduce((s,b)=>s+(getProfit(b)||0),0);
   const totalDays=fd.filter(d=>d.games.some(g=>g.result!==null)).length;
-  document.getElementById('kpi-grid').innerHTML=`<div class="kpi-card"><div class="kpi-label">💰 총 투자 금액</div><div class="kpi-val gold">${totalBet.toLocaleString()}원</div></div><div class="kpi-card"><div class="kpi-label">📅 경기 진행일수</div><div class="kpi-val gold">${totalDays}일</div></div><div class="kpi-card"><div class="kpi-label">📈 누적 손익</div><div class="kpi-val ${totalProfit>=0?'green':'red'}">${fmt(totalProfit)}</div></div><div class="kpi-card"><div class="kpi-label">💹 수익률</div><div class="kpi-val ${totalProfit>=0?'green':'red'}">${totalBet>0?(totalProfit/totalBet*100).toFixed(1):0}%</div></div>`;
-  function betStats(bets,label,cls){const done=bets.filter(b=>b.betResult!=='pending');const hits=done.filter(b=>b.betResult==='hit');const profit=done.reduce((s,b)=>s+(getProfit(b)||0),0);const rate=done.length?(hits.length/done.length*100).toFixed(0):0;return`<div class="bet-type-card ${cls}"><div class="bet-type-title">${label}</div><div class="bet-stat"><span class="bet-stat-label">진행 횟수</span><span class="bet-stat-val">${done.length}회</span></div><div class="bet-stat"><span class="bet-stat-label">적중</span><span class="bet-stat-val ${hits.length>0?'pos':''}">${hits.length}회</span></div><div class="bet-stat"><span class="bet-stat-label">적중률</span><span class="bet-stat-val ${rate>=50?'pos':'neg'}">${rate}%</span></div><div class="bet-stat"><span class="bet-stat-label">누적 손익</span><span class="bet-stat-val ${profit>=0?'pos':'neg'}">${fmt(profit)}</span></div></div>`;}
-  document.getElementById('bet-compare').innerHTML=betStats(fd.map(d=>d.unanimousBet).filter(Boolean),'🎯 만장일치','unanimous')+betStats(fd.flatMap(d=>d.allFiveBets||[]),'⚡ 도전경기','allfive')+betStats(fd.flatMap(d=>d.singleBets||[]),'1️⃣ 단독베팅','single');
+  document.getElementById('kpi-grid').innerHTML=`
+    <div class="kpi-card"><div class="kpi-label">💰 총 투자 금액</div><div class="kpi-val gold">${totalBet.toLocaleString()}원</div></div>
+    <div class="kpi-card"><div class="kpi-label">📅 경기 진행일수</div><div class="kpi-val gold">${totalDays}일</div></div>
+    <div class="kpi-card"><div class="kpi-label">📈 누적 손익</div><div class="kpi-val ${totalProfit>=0?'green':'red'}">${fmt(totalProfit)}</div></div>
+    <div class="kpi-card"><div class="kpi-label">💹 수익률</div><div class="kpi-val ${totalProfit>=0?'green':'red'}">${totalBet>0?(totalProfit/totalBet*100).toFixed(1):0}%</div></div>`;
+  function betStats(bets,label,cls){
+    const done=bets.filter(b=>b.betResult!=='pending');
+    const hits=done.filter(b=>b.betResult==='hit');
+    const profit=done.reduce((s,b)=>s+(getProfit(b)||0),0);
+    const rate=done.length?(hits.length/done.length*100).toFixed(0):0;
+    return`<div class="bet-type-card ${cls}"><div class="bet-type-title">${label}</div>
+      <div class="bet-stat"><span class="bet-stat-label">진행 횟수</span><span class="bet-stat-val">${done.length}회</span></div>
+      <div class="bet-stat"><span class="bet-stat-label">적중</span><span class="bet-stat-val ${hits.length>0?'pos':''}">${hits.length}회</span></div>
+      <div class="bet-stat"><span class="bet-stat-label">적중률</span><span class="bet-stat-val ${rate>=50?'pos':'neg'}">${rate}%</span></div>
+      <div class="bet-stat"><span class="bet-stat-label">누적 손익</span><span class="bet-stat-val ${profit>=0?'pos':'neg'}">${fmt(profit)}</span></div></div>`;
+  }
+  document.getElementById('bet-compare').innerHTML=betStats(fd.map(d=>d.unanimousBet).filter(Boolean),'🎯 만장일치','unanimous')+betStats(fd.flatMap(d=>d.allFiveBets||[]),'⚡ 도전경기','allfive');
   renderChart(fd,sDate,eDate);
 }
 function renderChart(fd,sDate,eDate){
   const canvas=document.getElementById('chart');if(!canvas)return;
-  const ctx=canvas.getContext('2d');canvas.width=canvas.offsetWidth*devicePixelRatio;canvas.height=160*devicePixelRatio;ctx.scale(devicePixelRatio,devicePixelRatio);
+  const ctx=canvas.getContext('2d');
+  canvas.width=canvas.offsetWidth*devicePixelRatio;canvas.height=160*devicePixelRatio;
+  ctx.scale(devicePixelRatio,devicePixelRatio);
   const W=canvas.offsetWidth,H=160;ctx.clearRect(0,0,W,H);
   const minTime=new Date(sDate).getTime(),maxTime=new Date(eDate).getTime(),timeRange=maxTime-minTime||86400000;
   const days=fd.filter(d=>d.unanimousBet.betResult!=='pending'||(d.allFiveBets||[]).some(b=>b.betResult!=='pending'));
   if(!days.length){ctx.fillStyle='#6b7280';ctx.font='13px sans-serif';ctx.textAlign='center';ctx.fillText('해당 기간에 결과 데이터가 없습니다',W/2,H/2);return;}
   let cum=0;const pts=[];
-  days.forEach(d=>{cum+=(getProfit(d.unanimousBet)||0)+(d.allFiveBets||[]).reduce((s,b)=>s+(getProfit(b)||0),0)+(d.singleBets||[]).reduce((s,b)=>s+(getProfit(b)||0),0);pts.push({time:new Date(d.date).getTime(),y:cum});});
+  days.forEach(d=>{cum+=(getProfit(d.unanimousBet)||0)+(d.allFiveBets||[]).reduce((s,b)=>s+(getProfit(b)||0),0);pts.push({time:new Date(d.date).getTime(),y:cum});});
   const pad={l:52,r:16,t:16,b:28},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
   const maxY=Math.max(...pts.map(p=>p.y),50),minY=Math.min(...pts.map(p=>p.y),-50),rY=maxY-minY||1;
   const toY=v=>pad.t+(1-(v-minY)/rY)*cH,toX=t=>pad.l+((t-minTime)/timeRange)*cW;
-  ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad.l,toY(0));ctx.lineTo(W-pad.r,toY(0));ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(pad.l,toY(0));ctx.lineTo(W-pad.r,toY(0));ctx.stroke();ctx.setLineDash([]);
   const isPos=pts[pts.length-1].y>=0,col=isPos?'#06d6a0':'#ef476f';
-  const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);grad.addColorStop(0,isPos?'rgba(6,214,160,.25)':'rgba(239,71,111,.25)');grad.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.beginPath();ctx.moveTo(toX(pts[0].time),toY(0));pts.forEach(p=>ctx.lineTo(toX(p.time),toY(p.y)));ctx.lineTo(toX(pts[pts.length-1].time),toY(0));ctx.closePath();ctx.fillStyle=grad;ctx.fill();
-  ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.lineJoin='round';pts.forEach((p,i)=>i===0?ctx.moveTo(toX(p.time),toY(p.y)):ctx.lineTo(toX(p.time),toY(p.y)));ctx.stroke();
+  const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
+  grad.addColorStop(0,isPos?'rgba(6,214,160,.25)':'rgba(239,71,111,.25)');grad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.beginPath();ctx.moveTo(toX(pts[0].time),toY(0));pts.forEach(p=>ctx.lineTo(toX(p.time),toY(p.y)));
+  ctx.lineTo(toX(pts[pts.length-1].time),toY(0));ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+  ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.lineJoin='round';
+  pts.forEach((p,i)=>i===0?ctx.moveTo(toX(p.time),toY(p.y)):ctx.lineTo(toX(p.time),toY(p.y)));ctx.stroke();
   pts.forEach(p=>{ctx.beginPath();ctx.arc(toX(p.time),toY(p.y),3.5,0,Math.PI*2);ctx.fillStyle=p.y>=0?'#06d6a0':'#ef476f';ctx.fill();});
-  ctx.fillStyle='#6b7280';ctx.font='10px sans-serif';ctx.textAlign='right';[maxY,0,minY].forEach(v=>ctx.fillText(v.toLocaleString(),pad.l-4,toY(v)+4));
-  ctx.textAlign='center';ctx.font='9px sans-serif';for(let i=0;i<=5;i++){const t=minTime+(timeRange*(i/5));const d=new Date(t);ctx.fillText(`${d.getMonth()+1}/${d.getDate()}`,toX(t),H-pad.b+14);}
+  ctx.fillStyle='#6b7280';ctx.font='10px sans-serif';ctx.textAlign='right';
+  [maxY,0,minY].forEach(v=>ctx.fillText(v.toLocaleString(),pad.l-4,toY(v)+4));
+  ctx.textAlign='center';ctx.font='9px sans-serif';
+  for(let i=0;i<=5;i++){const t=minTime+(timeRange*(i/5));const d=new Date(t);ctx.fillText(`${d.getMonth()+1}/${d.getDate()}`,toX(t),H-pad.b+14);}
 }
 function renderRecords(){
-  const{filtered}=getFilteredData();const el=document.getElementById('records-list');const days=[...filtered].reverse();
+  const{filtered}=getFilteredData();const el=document.getElementById('records-list');
+  const days=[...filtered].reverse();
   if(!days.length){el.innerHTML='<div class="empty">📝 기간 내 기록 없음</div>';return;}
-  el.innerHTML=days.map(d=>{const rows=d.games.map(g=>{const unani=isUnanimous(g),rs=g.result===null?'pending':g.pick===g.result?'hit':'miss';return`<tr><td class="col-match">${g.matchup}${unani?'<span class="unani-dot"></span>':''}</td><td class="col-ai1">${g.ai1}</td><td class="col-ai2">${g.ai2}</td><td class="col-ai3">${g.ai3}</td><td class="col-pick">${g.pick}</td><td class="col-result td-result-${rs}">${g.result||'대기'}</td></tr>`;}).join('');return`<div class="day-card"><div class="day-header"><span class="day-date">📅 ${d.date}</span></div><div class="table-scroll-wrap"><table class="games-table"><thead><tr><th class="th-group group-match"></th><th class="th-group group-ai" colspan="3">🦾 AI 예측</th><th class="th-group" style="background:rgba(245,166,35,0.10)">🎯</th><th class="th-group" style="background:rgba(6,214,160,0.10)">🏆</th></tr><tr><th class="col-match">매치업</th><th class="col-ai1">반짝이</th><th class="col-ai2">별이</th><th class="col-ai3">초롱이</th><th class="col-pick">최종픽</th><th class="col-result">결과</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;}).join('');
+  el.innerHTML=days.map(d=>{
+    const rows=d.games.map(g=>{
+      const unani=isUnanimous(g),rs=g.result===null?'pending':g.pick===g.result?'hit':'miss';
+      return`<tr><td class="col-match">${g.matchup}${unani?'<span class="unani-dot"></span>':''}</td><td class="col-ai1">${g.ai1}</td><td class="col-ai2">${g.ai2}</td><td class="col-ai3">${g.ai3}</td><td class="col-pick">${g.pick}</td><td class="col-result td-result-${rs}">${g.result||'대기'}</td></tr>`;
+    }).join('');
+    return`<div class="day-card"><div class="day-header"><span class="day-date">📅 ${d.date}</span></div>
+      <div class="table-scroll-wrap"><table class="games-table"><thead>
+        <tr><th class="th-group group-match"></th><th class="th-group group-ai" colspan="3">🦾 AI 예측</th><th class="th-group group-pick">🎯</th><th class="th-group group-result">🏆</th></tr>
+        <tr><th class="col-match">매치업</th><th class="col-ai1">반짝이</th><th class="col-ai2">별이</th><th class="col-ai3">초롱이</th><th class="col-pick">최종픽</th><th class="col-result">결과</th></tr>
+      </thead><tbody>${rows}</tbody></table></div></div>`;
+  }).join('');
 }
 function renderBetting(){
   const{filtered}=getFilteredData();
-  const uHtml=[...filtered.keys()].reverse().map(i=>{const d=filtered[i],item=d.unanimousBet;if(!item)return'';const games=item.customGames||getUnanimousGames(d);if(!games.length)return'';const status=calcBetStatus(games,item);return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;"><div class="bet-card-header-row1"><span class="day-date">📅 ${d.date}</span><span class="day-badge ${status}">${status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':'⏳ 대기중'}</span></div><div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${games.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원 ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*item.odds).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}</span></div></div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>${games.map(g=>{const rs=g.result===null?'pending':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}${status!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${status==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">${status==='pending'?'-':fmt(-item.amount)}</span></div>`:''}</div></div>`;}).join('');
-  const a5Html=[...filtered.keys()].reverse().map(i=>{const d=filtered[i],bets=d.allFiveBets||[];if(!bets.length)return'';return bets.map((item,bi)=>{const dg=item.customGames||d.games;const status=calcBetStatus(dg,item);const labels=item.pickLabels||dg.map(g=>g.pick);return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;"><div class="bet-card-header-row1"><span class="day-date">📅 ${d.date} <span style="font-size:10px;font-weight:700;color:#5ba8ff;background:rgba(91,168,255,0.10);border-radius:6px;padding:2px 8px;">${item.label||'조합'+(bi+1)}</span></span><span class="day-badge ${status}">${status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':'⏳ 대기중'}</span></div><div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${dg.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원 ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*item.odds).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}</span></div></div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>${dg.map((g,gi)=>{const rs=g.result===null?'pending':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${labels[gi]||g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}${status!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${status==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">${status==='pending'?'-':fmt(-item.amount)}</span></div>`:''}</div></div>`;}).join('');}).join('');
-  const sHtml=[...filtered.keys()].reverse().map(i=>{const d=filtered[i],bets=d.singleBets||[];if(!bets.length)return'';return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;"><div class="bet-card-header-row1"><span class="day-date">📅 ${d.date}</span></div></div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업 / 픽</span><span class="col-pick">배당</span><span class="col-result">결과</span></div>${bets.map(b=>{const rs=b.result===null?'pending':b.pick===b.result?'hit':'miss';const st=b.betResult!=='pending'?b.betResult:rs;return`<div class="game-row"><span class="game-matchup">${b.matchup} <span class="pick-chip">${b.pick}</span></span><span class="col-pick-cell" style="color:var(--gold2);font-weight:700;">${b.odds}배</span><span class="col-result-cell game-result ${rs}">${b.result||'대기'}</span></div><div style="display:flex;justify-content:space-between;padding:2px 20px 6px;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="color:var(--gray);">베팅 ${b.amount.toLocaleString()}원</span><span class="${st==='hit'?'pos':st==='pending'?'neu':'neg'}" style="font-weight:700;">${st==='hit'?`+${Math.round(b.amount*b.odds-b.amount).toLocaleString()}원`:st==='pending'?`예상 +${Math.round(b.amount*b.odds-b.amount).toLocaleString()}원`:`-${b.amount.toLocaleString()}원`}</span></div>`;}).join('')}</div></div>`;}).join('');
+  const uHtml=[...filtered.keys()].reverse().map(i=>{
+    const d=filtered[i],item=d.unanimousBet;if(!item)return'';
+    const games=item.customGames||getUnanimousGames(d);if(!games.length)return'';
+    const status=calcBetStatus(games,item);
+    return`<div class="day-card" style="margin-bottom:14px">
+      <div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
+        <div class="bet-card-header-row1"><span class="day-date">📅 ${d.date}</span><span class="day-badge ${status}">${status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':'⏳ 대기중'}</span></div>
+        <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${games.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원
+          ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*item.odds).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}
+        </span></div>
+      </div>
+      <div class="day-body">
+        <div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
+        ${games.map(g=>{const rs=g.result===null?'pending':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
+        ${status!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${status==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">${status==='pending'?'-':fmt(-item.amount)}</span></div>`:''}
+      </div></div>`;
+  }).join('');
+  const a5Html=[...filtered.keys()].reverse().map(i=>{
+    const d=filtered[i],bets=d.allFiveBets||[];if(!bets.length)return'';
+    return bets.map((item,bi)=>{
+      const displayGames=item.customGames||d.games;
+      const status=calcBetStatus(displayGames,item);
+      const labels=item.pickLabels||displayGames.map(g=>g.pick);
+      return`<div class="day-card" style="margin-bottom:14px">
+        <div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
+          <div class="bet-card-header-row1"><span class="day-date">📅 ${d.date} <span style="font-size:10px;font-weight:700;color:#5ba8ff;background:rgba(91,168,255,0.10);border-radius:6px;padding:2px 8px;">${item.label||'조합'+(bi+1)}</span></span><span class="day-badge ${status}">${status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':'⏳ 대기중'}</span></div>
+          <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${displayGames.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원
+            ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*item.odds).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}
+          </span></div>
+        </div>
+        <div class="day-body">
+          <div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
+          ${displayGames.map((g,gi)=>{const rs=g.result===null?'pending':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${labels[gi]||g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
+          ${status!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${status==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">${status==='pending'?'-':fmt(-item.amount)}</span></div>`:''}
+        </div></div>`;
+    }).join('');
+  }).join('');
   document.getElementById('unanimous-list').innerHTML=uHtml||'<div class="empty">📝 기간 내 만장일치 베팅 내역이 없습니다.</div>';
   document.getElementById('allfive-list').innerHTML=a5Html||'<div class="empty">📝 기간 내 도전경기 베팅 내역이 없습니다.</div>';
-  document.getElementById('single-list').innerHTML=sHtml||'<div class="empty">📝 기간 내 단독베팅 내역이 없습니다.</div>';
 }
-function filterBetType(type){['unanimous','allfive','single'].forEach(t=>{document.getElementById('btn-'+t).classList.toggle('active',t===type);document.getElementById('panel-'+t).classList.toggle('active',t===type);});}
-function showTab(id){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['dashboard','records','betting'][i]===id));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+id));if(id==='dashboard')renderDashboard();if(id==='records')renderRecords();if(id==='betting')renderBetting();}
+function filterBetType(type){
+  document.getElementById('btn-unanimous').classList.toggle('active',type==='unanimous');
+  document.getElementById('btn-allfive').classList.toggle('active',type==='allfive');
+  document.getElementById('panel-unanimous').classList.toggle('active',type==='unanimous');
+  document.getElementById('panel-allfive').classList.toggle('active',type==='allfive');
+}
+function showTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['dashboard','records','betting'][i]===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+id));
+  if(id==='dashboard')renderDashboard();if(id==='records')renderRecords();if(id==='betting')renderBetting();
+}
 renderDashboard();renderRecords();
 </script>
 </body>
