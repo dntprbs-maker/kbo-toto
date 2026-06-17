@@ -261,9 +261,18 @@ canvas{width:100%!important;}
         <div class="dash-menu-desc">오늘 베팅 & 경기<br>예상 수익 확인</div>
       </div>
     </div>
+
+    <!-- 일별 손익 현황 -->
+    <div class="sec" style="cursor:pointer;" onclick="showDetail('daily')">📅 일별 손익 현황 <span style="float:right;font-size:11px;color:var(--gray);font-weight:400;letter-spacing:0;text-transform:none;">전체보기 ›</span></div>
+    <div id="daily-summary-list"></div>
   </div>
 
-  <!-- 1. 적중률/수익률 상세 -->
+  <!-- 5. 일별 손익 상세 -->
+  <div class="detail-view" id="detail-daily">
+    <button class="back-btn" onclick="showMain()"><span class="back-arrow">←</span> 대시보드</button>
+    <div class="sec" style="margin-top:0;">📅 일별 손익 전체 내역</div>
+    <div id="daily-detail-list"></div>
+  </div>
   <div class="detail-view" id="detail-accuracy">
     <!-- 적중률 메인 화면 -->
     <div id="acc-main">
@@ -369,10 +378,125 @@ function getProfit(bet){
 }
 function fmt(v,unit='원'){if(v===null)return'-';return(v>=0?'+':'')+v.toLocaleString()+unit;}
 
+// ── 일별 손익 ──
+function calcDayProfit(d){
+  let invest=0, profit=0, pending=false;
+  const allBets=[
+    d.unanimousBet,
+    ...(d.allFiveBets||[]),
+    ...(d.singleBets||[])
+  ].filter(Boolean);
+  allBets.forEach(b=>{
+    if(b.betResult==='pending'){pending=true;return;}
+    if(b.betResult==='cancel')return;
+    invest+=b.amount;
+    profit+=getProfit(b)||0;
+  });
+  return{invest,profit,pending};
+}
+
+function renderDailySummary(targetId, limit){
+  const days=[...DATA].reverse();
+  const list=limit?days.slice(0,limit):days;
+  const el=document.getElementById(targetId);
+  if(!el)return;
+
+  el.innerHTML=list.map(d=>{
+    const{invest,profit,pending}=calcDayProfit(d);
+    const profitColor=pending?'var(--gray)':profit>=0?'var(--green)':'var(--red)';
+    const profitText=pending?'대기중':fmt(profit);
+    const roi=invest>0&&!pending?(profit/invest*100).toFixed(0)+'%':'-';
+    const allBets=[d.unanimousBet,...(d.allFiveBets||[]),...(d.singleBets||[])].filter(Boolean);
+    const hitCount=allBets.filter(b=>b.betResult==='hit').length;
+    const doneCount=allBets.filter(b=>b.betResult!=='pending'&&b.betResult!=='cancel').length;
+
+    return`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:10px;cursor:pointer;" onclick="showDetail('daily')">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:13px;font-weight:900;color:var(--gold);">📅 ${d.date}</span>
+        <span style="font-size:18px;font-weight:900;color:${profitColor}">${profitText}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gray);">
+        <span>💰 투자 <strong style="color:var(--light)">${invest.toLocaleString()}원</strong></span>
+        <span>🎯 적중 <strong style="color:var(--light)">${hitCount}/${doneCount}</strong></span>
+        <span>💹 수익률 <strong style="color:${profitColor}">${roi}</strong></span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderDailyDetail(){
+  const days=[...DATA].reverse();
+  const el=document.getElementById('daily-detail-list');
+  if(!el)return;
+
+  // 전체 합계
+  let totalInvest=0,totalProfit=0;
+  DATA.forEach(d=>{
+    const{invest,profit,pending}=calcDayProfit(d);
+    if(!pending){totalInvest+=invest;totalProfit+=profit;}
+  });
+  const totalRoi=totalInvest>0?(totalProfit/totalInvest*100).toFixed(1):0;
+  const totalColor=totalProfit>=0?'var(--green)':'var(--red)';
+
+  const summary=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:var(--gray);margin-bottom:4px;">총 투자</div>
+      <div style="font-size:16px;font-weight:900;color:var(--gold)">${totalInvest.toLocaleString()}원</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:var(--gray);margin-bottom:4px;">누적 손익</div>
+      <div style="font-size:16px;font-weight:900;color:${totalColor}">${fmt(totalProfit)}</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:var(--gray);margin-bottom:4px;">수익률</div>
+      <div style="font-size:16px;font-weight:900;color:${totalColor}">${totalRoi}%</div>
+    </div>
+  </div>`;
+
+  const rows=days.map(d=>{
+    const{invest,profit,pending}=calcDayProfit(d);
+    const profitColor=pending?'var(--gray)':profit>=0?'var(--green)':'var(--red)';
+    const roi=invest>0&&!pending?(profit/invest*100).toFixed(0)+'%':'-';
+    const allBets=[d.unanimousBet,...(d.allFiveBets||[]),...(d.singleBets||[])].filter(Boolean);
+    const hitCount=allBets.filter(b=>b.betResult==='hit').length;
+    const doneCount=allBets.filter(b=>b.betResult!=='pending'&&b.betResult!=='cancel').length;
+
+    // 베팅 상세
+    const betRows=[
+      {label:'🎯 만장일치',b:d.unanimousBet},
+      ...(d.allFiveBets||[]).map((b,i)=>({label:`⚡ ${b.label||'도전'+i}`,b})),
+      ...(d.singleBets||[]).map(b=>({label:`1️⃣ ${b.matchup}`,b})),
+    ].filter(x=>x.b&&x.b.betResult!=='cancel').map(({label,b})=>{
+      const p=getProfit(b);
+      const c=b.betResult==='hit'?'var(--green)':b.betResult==='miss'?'var(--red)':'var(--gray)';
+      const icon=b.betResult==='hit'?'✅':b.betResult==='miss'?'❌':'⏳';
+      return`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px;">
+        <span style="color:var(--gray);flex:1;">${label}</span>
+        <span style="color:var(--light);margin:0 8px;">${b.amount.toLocaleString()}원×${b.odds}배</span>
+        <span style="color:${c};font-weight:700;min-width:60px;text-align:right;">${icon} ${p===null?'-':fmt(p)}</span>
+      </div>`;
+    }).join('');
+
+    return`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;">
+      <div style="padding:10px 16px;background:linear-gradient(90deg,#1a2235,#111827);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;font-weight:900;color:var(--gold);">📅 ${d.date}</span>
+        <div style="text-align:right;">
+          <div style="font-size:16px;font-weight:900;color:${profitColor}">${pending?'대기중':fmt(profit)}</div>
+          <div style="font-size:10px;color:var(--gray);">투자 ${invest.toLocaleString()}원 / 적중 ${hitCount}/${doneCount} / ${roi}</div>
+        </div>
+      </div>
+      <div style="padding:8px 16px;">${betRows}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML=summary+rows;
+}
+
 // ── 대시보드 네비게이션 ──
 function showMain(){
   document.getElementById('dash-main').style.display='block';
   document.querySelectorAll('.detail-view').forEach(el=>el.classList.remove('active'));
+  renderDailySummary('daily-summary-list', 5);
 }
 function showDetail(type){
   document.getElementById('dash-main').style.display='none';
@@ -382,6 +506,7 @@ function showDetail(type){
   if(type==='profit') renderProfit();
   if(type==='pattern') renderPattern();
   if(type==='today') renderToday();
+  if(type==='daily') renderDailyDetail();
 }
 
 function hideAccDetail(){
