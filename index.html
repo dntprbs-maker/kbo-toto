@@ -165,7 +165,7 @@ canvas{width:100%!important;}
 .game-result.hit{color:var(--green);font-weight:700;}
 .game-result.miss{color:var(--red);font-weight:700;}
 .game-result.pending{color:var(--gray);}
-.bet-filter-wrap{display:flex;gap:8px;margin-bottom:16px;background:var(--bg2);padding:0;}
+.bet-filter-wrap{display:flex;gap:8px;margin-bottom:16px;position:sticky;top:calc(var(--h-header) + 46px);z-index:80;background:var(--bg2);padding:8px 0 4px;}
 .btn-filter{flex:1;padding:10px;font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--border);color:var(--gray);border-radius:8px;cursor:pointer;transition:all .2s;text-align:center;}
 .btn-filter.active.unanimous{border-color:var(--gold);color:var(--gold);background:rgba(245,166,35,0.05);}
 .btn-filter.active.allfive{border-color:#5ba8ff;color:#5ba8ff;background:rgba(91,168,255,0.05);}
@@ -179,6 +179,27 @@ canvas{width:100%!important;}
 .pos{color:var(--green);}
 .neg{color:var(--red);}
 .neu{color:var(--gray);}
+
+/* 편집 모달 */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;overflow-y:auto;}
+.modal-overlay.active{display:flex;align-items:flex-start;justify-content:center;padding:20px 12px;}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;width:100%;max-width:480px;padding:20px;margin:auto;}
+.modal-title{font-size:15px;font-weight:900;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
+.modal-close{font-size:20px;cursor:pointer;color:var(--gray);background:none;border:none;}
+.modal-section{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.modal-field{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.modal-label{font-size:11px;color:var(--gray);width:70px;flex-shrink:0;}
+.modal-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--light);font-size:12px;outline:none;font-family:inherit;}
+.modal-input:focus{border-color:var(--gold);}
+.modal-select{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--light);font-size:12px;outline:none;font-family:inherit;}
+.modal-select:focus{border-color:var(--gold);}
+.modal-game-row{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;}
+.modal-game-title{font-size:11px;font-weight:700;color:var(--light);margin-bottom:8px;}
+.modal-btn-row{display:flex;gap:8px;margin-top:16px;}
+.modal-btn{flex:1;padding:12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;}
+.modal-btn.confirm{background:var(--gold);color:#000;}
+.modal-btn.cancel{background:var(--card);color:var(--gray);border:1px solid var(--border);}
+.edit-btn{background:none;border:none;cursor:pointer;font-size:14px;padding:2px 6px;color:var(--gray);}
 @media(min-width:600px){.bet-card-summary-row{display:flex;align-items:center;flex:1;margin-top:0;gap:8px;}}
 @media(min-width:1024px){
   .header-inner,.tabs,main{max-width:66vw;margin:0 auto;}
@@ -194,10 +215,19 @@ canvas{width:100%!important;}
 </head>
 <body>
 <header><div class="header-inner"><div class="logo">⚾ KBO<em>TOTO</em></div><div class="header-sub">2026 한국 프로야구 투자 기록부</div></div></header>
-<div class="tabs">
-  <div class="tab active" onclick="showTab('dashboard')">📊 대시보드</div>
-  <div class="tab" onclick="showTab('records')">📋 경기기록</div>
-  <div class="tab" onclick="showTab('betting')">🎯 베팅내역</div>
+<div id="tabs-sticky" style="position:sticky;top:var(--h-header);z-index:90;background:var(--bg);">
+  <div class="tabs" style="position:static;">
+    <div class="tab active" onclick="showTab('dashboard')">📊 대시보드</div>
+    <div class="tab" onclick="showTab('records')">📋 경기기록</div>
+    <div class="tab" onclick="showTab('betting')">🎯 베팅내역</div>
+  </div>
+  <div id="bet-filter-sticky" style="display:none;padding:6px 12px 4px;background:var(--bg2);border-left:1px solid var(--border);border-right:1px solid var(--border);">
+    <div style="display:flex;gap:8px;">
+      <div class="btn-filter active unanimous" id="btn-unanimous" onclick="filterBetType('unanimous')">🎯 만장일치</div>
+      <div class="btn-filter allfive" id="btn-allfive" onclick="filterBetType('allfive')">⚡ 도전경기</div>
+      <div class="btn-filter single" id="btn-single" onclick="filterBetType('single')">1️⃣ 단독베팅</div>
+    </div>
+  </div>
 </div>
 <main>
 <!-- 대시보드 탭 -->
@@ -286,16 +316,25 @@ canvas{width:100%!important;}
 <div class="panel" id="tab-records"><div id="records-list"></div></div>
 
 <!-- 베팅내역 탭 -->
-<div class="panel" id="tab-betting" style="padding-top:12px;">
-  <div class="bet-filter-wrap">
-    <div class="btn-filter active unanimous" id="btn-unanimous" onclick="filterBetType('unanimous')">🎯 만장일치</div>
-    <div class="btn-filter allfive" id="btn-allfive" onclick="filterBetType('allfive')">⚡ 도전경기</div>
-    <div class="btn-filter single" id="btn-single" onclick="filterBetType('single')">1️⃣ 단독베팅</div>
-  </div>
+<div class="panel" id="tab-betting" style="padding-top:12px;border-top:none;border-radius:0 0 14px 14px;">
   <div class="bet-lists-container">
     <div class="bet-content-panel active" id="panel-unanimous"><div class="bet-pc-header">🎯 만장일치 내역</div><div id="unanimous-list"></div></div>
     <div class="bet-content-panel" id="panel-allfive"><div class="bet-pc-header">⚡ 도전경기 내역</div><div id="allfive-list"></div></div>
     <div class="bet-content-panel" id="panel-single"><div class="bet-pc-header">1️⃣ 단독베팅 내역</div><div id="single-list"></div></div>
+  </div>
+</div>
+<!-- 편집 모달 -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box">
+    <div class="modal-title">
+      <span id="modal-title-text">✏️ 기록 수정</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+    <div class="modal-btn-row">
+      <button class="modal-btn cancel" onclick="closeModal()">취소</button>
+      <button class="modal-btn confirm" onclick="saveModal()">저장</button>
+    </div>
   </div>
 </div>
 </main>
@@ -698,18 +737,234 @@ function renderToday(){
   el.innerHTML=html;
 }
 
+// ── 편집 기능 ──
+let editTarget = null; // {type, dayIdx, subIdx}
+
+function openEditModal(type, dayIdx, subIdx) {
+  const d = DATA[dayIdx];
+  editTarget = {type, dayIdx, subIdx};
+  const modal = document.getElementById('edit-modal');
+  let html = '';
+
+  if (type === 'game') {
+    // 경기기록 전체 날짜 편집
+    document.getElementById('modal-title-text').textContent = `✏️ ${d.date} 경기 수정`;
+    html = d.games.map((g, gi) => `
+      <div class="modal-game-row">
+        <div class="modal-game-title">${g.matchup}</div>
+        <div class="modal-field">
+          <span class="modal-label">반짝이</span>
+          <input class="modal-input" id="edit-ai1-${gi}" value="${g.ai1||''}">
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">별이</span>
+          <input class="modal-input" id="edit-ai2-${gi}" value="${g.ai2||''}">
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">초롱이</span>
+          <input class="modal-input" id="edit-ai3-${gi}" value="${g.ai3||''}">
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">최종픽</span>
+          <input class="modal-input" id="edit-pick-${gi}" value="${g.pick||''}">
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">결과</span>
+          <input class="modal-input" id="edit-result-${gi}" value="${g.result||''}">
+        </div>
+      </div>`).join('');
+
+  } else if (type === 'unanimous') {
+    const item = d.unanimousBet;
+    const games = item.customGames || getUnanimousGames(d);
+    document.getElementById('modal-title-text').textContent = `✏️ ${d.date} 만장일치 수정`;
+    html = `
+      <div class="modal-field">
+        <span class="modal-label">배당</span>
+        <input class="modal-input" id="edit-odds" type="number" step="0.1" value="${item.odds}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">베팅금액</span>
+        <input class="modal-input" id="edit-amount" type="number" value="${item.amount}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">결과</span>
+        <select class="modal-select" id="edit-betresult">
+          <option value="hit" ${item.betResult==='hit'?'selected':''}>✅ 적중</option>
+          <option value="miss" ${item.betResult==='miss'?'selected':''}>❌ 미적중</option>
+          <option value="cancel" ${item.betResult==='cancel'?'selected':''}>취소</option>
+          <option value="pending" ${item.betResult==='pending'?'selected':''}>⏳ 대기중</option>
+        </select>
+      </div>
+      <div class="modal-section">경기 픽 / 결과</div>
+      ${games.map((g,gi)=>`
+      <div class="modal-game-row">
+        <div class="modal-game-title">${g.matchup}</div>
+        <div class="modal-field">
+          <span class="modal-label">픽</span>
+          <input class="modal-input" id="edit-upick-${gi}" value="${g.pick||''}">
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">결과</span>
+          <input class="modal-input" id="edit-uresult-${gi}" value="${g.result||''}">
+        </div>
+      </div>`).join('')}`;
+
+  } else if (type === 'allfive') {
+    const item = d.allFiveBets[subIdx];
+    const dg = item.customGames || d.games;
+    const labels = item.pickLabels || dg.map(g=>g.pick);
+    document.getElementById('modal-title-text').textContent = `✏️ ${d.date} 도전경기 수정`;
+    html = `
+      <div class="modal-field">
+        <span class="modal-label">이름</span>
+        <input class="modal-input" id="edit-label" value="${item.label||''}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">배당</span>
+        <input class="modal-input" id="edit-odds" type="number" step="0.1" value="${item.odds}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">베팅금액</span>
+        <input class="modal-input" id="edit-amount" type="number" value="${item.amount}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">결과</span>
+        <select class="modal-select" id="edit-betresult">
+          <option value="hit" ${item.betResult==='hit'?'selected':''}>✅ 적중</option>
+          <option value="miss" ${item.betResult==='miss'?'selected':''}>❌ 미적중</option>
+          <option value="cancel" ${item.betResult==='cancel'?'selected':''}>취소</option>
+          <option value="pending" ${item.betResult==='pending'?'selected':''}>⏳ 대기중</option>
+        </select>
+      </div>
+      <div class="modal-section">픽 레이블</div>
+      ${labels.map((lb,li)=>`
+      <div class="modal-field">
+        <span class="modal-label">${dg[li]?dg[li].matchup.split(' vs ')[0]:'픽'+(li+1)}</span>
+        <input class="modal-input" id="edit-label-${li}" value="${lb}">
+      </div>`).join('')}`;
+
+  } else if (type === 'single') {
+    const item = d.singleBets[subIdx];
+    document.getElementById('modal-title-text').textContent = `✏️ ${d.date} 단독베팅 수정`;
+    html = `
+      <div class="modal-field">
+        <span class="modal-label">매치업</span>
+        <input class="modal-input" id="edit-matchup" value="${item.matchup||''}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">픽</span>
+        <input class="modal-input" id="edit-pick" value="${item.pick||''}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">배당</span>
+        <input class="modal-input" id="edit-odds" type="number" step="0.01" value="${item.odds}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">베팅금액</span>
+        <input class="modal-input" id="edit-amount" type="number" value="${item.amount}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">결과</span>
+        <input class="modal-input" id="edit-result" value="${item.result||''}">
+      </div>
+      <div class="modal-field">
+        <span class="modal-label">베팅결과</span>
+        <select class="modal-select" id="edit-betresult">
+          <option value="hit" ${item.betResult==='hit'?'selected':''}>✅ 적중</option>
+          <option value="miss" ${item.betResult==='miss'?'selected':''}>❌ 미적중</option>
+          <option value="cancel" ${item.betResult==='cancel'?'selected':''}>취소</option>
+          <option value="pending" ${item.betResult==='pending'?'selected':''}>⏳ 대기중</option>
+        </select>
+      </div>`;
+  }
+
+  document.getElementById('modal-body').innerHTML = html;
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('edit-modal').classList.remove('active');
+  editTarget = null;
+}
+
+function saveModal() {
+  if (!editTarget) return;
+  const {type, dayIdx, subIdx} = editTarget;
+  const d = DATA[dayIdx];
+  const v = id => document.getElementById(id)?.value?.trim();
+  const n = id => parseFloat(document.getElementById(id)?.value) || 0;
+  const ni = id => parseInt(document.getElementById(id)?.value) || 0;
+
+  if (type === 'game') {
+    d.games.forEach((g, gi) => {
+      g.ai1 = v(`edit-ai1-${gi}`) || g.ai1;
+      g.ai2 = v(`edit-ai2-${gi}`) || g.ai2;
+      g.ai3 = v(`edit-ai3-${gi}`) || g.ai3;
+      g.pick = v(`edit-pick-${gi}`) || g.pick;
+      const r = v(`edit-result-${gi}`);
+      g.result = r === '' ? null : r;
+    });
+    closeModal();
+    renderRecords();
+
+  } else if (type === 'unanimous') {
+    const item = d.unanimousBet;
+    item.odds = n('edit-odds');
+    item.amount = ni('edit-amount');
+    item.betResult = v('edit-betresult');
+    const games = item.customGames || getUnanimousGames(d);
+    games.forEach((g, gi) => {
+      g.pick = v(`edit-upick-${gi}`) || g.pick;
+      const r = v(`edit-uresult-${gi}`);
+      g.result = r === '' ? null : r;
+    });
+    closeModal();
+    renderBetting();
+
+  } else if (type === 'allfive') {
+    const item = d.allFiveBets[subIdx];
+    item.label = v('edit-label') || item.label;
+    item.odds = n('edit-odds');
+    item.amount = ni('edit-amount');
+    item.betResult = v('edit-betresult');
+    const dg = item.customGames || d.games;
+    const labels = item.pickLabels || dg.map(g=>g.pick);
+    labels.forEach((_, li) => { labels[li] = v(`edit-label-${li}`) || labels[li]; });
+    if (item.pickLabels) item.pickLabels = labels;
+    closeModal();
+    renderBetting();
+
+  } else if (type === 'single') {
+    const item = d.singleBets[subIdx];
+    item.matchup = v('edit-matchup') || item.matchup;
+    item.pick = v('edit-pick') || item.pick;
+    item.odds = n('edit-odds');
+    item.amount = ni('edit-amount');
+    const r = v('edit-result');
+    item.result = r === '' ? null : r;
+    item.betResult = v('edit-betresult');
+    closeModal();
+    renderBetting();
+  }
+}
+
 // ── 경기기록 렌더 ──
 function renderRecords(){
   const el=document.getElementById('records-list');
   const days=[...DATA].reverse();
   if(!days.length){el.innerHTML='<div class="empty">📝 기록 없음</div>';return;}
   el.innerHTML=days.map(d=>{
+    const dayIdx=DATA.indexOf(d);
     const rows=d.games.map(g=>{
       const unani=isUnanimous(g);
       const rs=g.result===null?'pending':g.result==='취소'?'cancel':g.pick===g.result?'hit':'miss';
       return`<tr><td class="col-match">${g.matchup}${unani?'<span class="unani-dot"></span>':''}</td><td class="col-ai1">${g.ai1}</td><td class="col-ai2">${g.ai2}</td><td class="col-ai3">${g.ai3}</td><td class="col-pick">${g.pick}</td><td class="col-result td-result-${rs}">${g.result||'대기'}</td></tr>`;
     }).join('');
-    return`<div class="day-card"><div class="day-header"><span class="day-date">📅 ${d.date}</span></div>
+    return`<div class="day-card"><div class="day-header">
+        <span class="day-date">📅 ${d.date}</span>
+        <button class="edit-btn" onclick="openEditModal('game',${dayIdx})" title="수정">✏️</button>
+      </div>
       <div class="table-scroll-wrap"><table class="games-table">
         <thead><tr><th class="th-group group-match"></th><th class="th-group group-ai" colspan="3">🦾 AI 예측</th><th class="th-group group-pick">🎯</th><th class="th-group group-result">🏆</th></tr>
         <tr><th class="col-match">매치업</th><th class="col-ai1">반짝이</th><th class="col-ai2">별이</th><th class="col-ai3">초롱이</th><th class="col-pick">최종픽</th><th class="col-result">결과</th></tr></thead>
@@ -726,7 +981,13 @@ function renderBetting(){
     if(!games.length)return'';
     const status=calcBetStatus(games,item);
     return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
-      <div class="bet-card-header-row1"><span class="day-date">📅 ${d.date}</span><span class="day-badge ${status}">${status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':status==='cancel'?'취소':'⏳ 대기중'}</span></div>
+      <div class="bet-card-header-row1">
+        <span class="day-date">📅 ${d.date}</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="day-badge ${status}">${status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':status==='cancel'?'취소':'⏳ 대기중'}</span>
+          <button class="edit-btn" onclick="openEditModal('unanimous',${i})">✏️</button>
+        </div>
+      </div>
       <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${games.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원 ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*(item.odds-1)).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}</span></div>
       </div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
       ${games.map(g=>{const rs=g.result===null?'pending':g.result==='취소'?'cancel':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
@@ -742,7 +1003,13 @@ function renderBetting(){
       const status=calcBetStatus(dg,item);
       const labels=item.pickLabels||dg.map(g=>g.pick);
       return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
-        <div class="bet-card-header-row1"><span class="day-date">📅 ${d.date} <span style="font-size:10px;font-weight:700;color:#5ba8ff;background:rgba(91,168,255,0.10);border-radius:6px;padding:2px 8px;">${item.label||'조합'+(bi+1)}</span></span><span class="day-badge ${status}">${status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':status==='cancel'?'취소':'⏳ 대기중'}</span></div>
+        <div class="bet-card-header-row1">
+          <span class="day-date">📅 ${d.date} <span style="font-size:10px;font-weight:700;color:#5ba8ff;background:rgba(91,168,255,0.10);border-radius:6px;padding:2px 8px;">${item.label||'조합'+(bi+1)}</span></span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="day-badge ${status}">${status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':status==='cancel'?'취소':'⏳ 대기중'}</span>
+            <button class="edit-btn" onclick="openEditModal('allfive',${i},${bi})">✏️</button>
+          </div>
+        </div>
         <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${dg.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원 ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*(item.odds-1)).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}</span></div>
         </div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
         ${dg.map((g,gi)=>{const rs=g.result===null?'pending':g.result==='취소'?'cancel':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${labels[gi]||g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
@@ -754,13 +1021,22 @@ function renderBetting(){
   const sHtml=[...DATA.keys()].reverse().map(i=>{
     const d=DATA[i],bets=d.singleBets||[];
     if(!bets.length)return'';
-    return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;"><div class="bet-card-header-row1"><span class="day-date">📅 ${d.date}</span></div></div>
+    return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
+      <div class="bet-card-header-row1">
+        <span class="day-date">📅 ${d.date}</span>
+        <button class="edit-btn" onclick="openEditModal('single',${i},0)">✏️ 전체수정</button>
+      </div></div>
       <div class="day-body"><div class="game-list-header"><span class="col-match">매치업 / 픽</span><span class="col-pick">배당</span><span class="col-result">결과</span></div>
-      ${bets.map(b=>{
+      ${bets.map((b,bi)=>{
         const rs=b.result===null?'pending':b.result==='취소'?'cancel':b.pick===b.result?'hit':'miss';
         const st=b.betResult!=='pending'?b.betResult:rs;
         const profit=st==='hit'?Math.round(b.amount*(b.odds-1)):st==='cancel'?0:-b.amount;
-        return`<div class="game-row"><span class="game-matchup">${b.matchup} <span class="pick-chip">${b.pick}</span></span><span class="col-pick-cell" style="color:var(--gold2);font-weight:700;">${b.odds}배</span><span class="col-result-cell game-result ${rs}">${b.result||'대기'}</span></div>
+        return`<div class="game-row" style="position:relative;">
+          <span class="game-matchup">${b.matchup} <span class="pick-chip">${b.pick}</span></span>
+          <span class="col-pick-cell" style="color:var(--gold2);font-weight:700;">${b.odds}배</span>
+          <span class="col-result-cell game-result ${rs}">${b.result||'대기'}</span>
+          <button class="edit-btn" onclick="openEditModal('single',${i},${bi})" style="font-size:12px;">✏️</button>
+        </div>
         <div style="display:flex;justify-content:space-between;padding:2px 20px 6px;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="color:var(--gray);">베팅 ${st==='cancel'?'0(환불)':b.amount.toLocaleString()}원</span><span class="${st==='hit'?'pos':st==='cancel'?'neu':'neg'}" style="font-weight:700;">${st==='cancel'?'취소(환불)':fmt(profit)}</span></div>`;
       }).join('')}</div></div>`;
   }).join('');
@@ -780,6 +1056,7 @@ function filterBetType(type){
 function showTab(id){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['dashboard','records','betting'][i]===id));
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+id));
+  document.getElementById('bet-filter-sticky').style.display=id==='betting'?'block':'none';
   if(id==='records')renderRecords();
   if(id==='betting')renderBetting();
   if(id==='dashboard'){showMain();}
