@@ -165,7 +165,7 @@ canvas{width:100%!important;}
 .game-result.hit{color:var(--green);font-weight:700;}
 .game-result.miss{color:var(--red);font-weight:700;}
 .game-result.pending{color:var(--gray);}
-.bet-filter-wrap{display:flex;gap:8px;margin-bottom:16px;position:sticky;top:calc(var(--h-header) + 46px);z-index:80;background:var(--bg2);padding:8px 0;}
+.bet-filter-wrap{display:flex;gap:8px;margin-bottom:16px;background:var(--bg2);padding:0;}
 .btn-filter{flex:1;padding:10px;font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--border);color:var(--gray);border-radius:8px;cursor:pointer;transition:all .2s;text-align:center;}
 .btn-filter.active.unanimous{border-color:var(--gold);color:var(--gold);background:rgba(245,166,35,0.05);}
 .btn-filter.active.allfive{border-color:#5ba8ff;color:#5ba8ff;background:rgba(91,168,255,0.05);}
@@ -286,7 +286,7 @@ canvas{width:100%!important;}
 <div class="panel" id="tab-records"><div id="records-list"></div></div>
 
 <!-- 베팅내역 탭 -->
-<div class="panel" id="tab-betting">
+<div class="panel" id="tab-betting" style="padding-top:12px;">
   <div class="bet-filter-wrap">
     <div class="btn-filter active unanimous" id="btn-unanimous" onclick="filterBetType('unanimous')">🎯 만장일치</div>
     <div class="btn-filter allfive" id="btn-allfive" onclick="filterBetType('allfive')">⚡ 도전경기</div>
