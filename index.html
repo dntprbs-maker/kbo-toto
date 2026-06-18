@@ -397,7 +397,7 @@ function calcDayProfit(d){
 }
 
 function renderDailySummary(targetId, limit){
-  const days=[...DATA].reverse();
+  const days=[...DATA].sort((a,b)=>b.date.localeCompare(a.date));
   const list=limit?days.slice(0,limit):days;
   const el=document.getElementById(targetId);
   if(!el)return;
@@ -426,7 +426,7 @@ function renderDailySummary(targetId, limit){
 }
 
 function renderDailyDetail(){
-  const days=[...DATA].reverse();
+  const days=[...DATA].sort((a,b)=>b.date.localeCompare(a.date));
   const el=document.getElementById('daily-detail-list');
   if(!el)return;
 
@@ -526,7 +526,7 @@ function showAccDetail(type){
   // 행 데이터 수집
   let rows=[];
 
-  done.slice().reverse().forEach(d=>{
+  done.slice().sort((a,b)=>b.date.localeCompare(a.date)).forEach(d=>{
     if(type==='unanimous'||type==='all'){
       const item=d.unanimousBet;
       if(item&&item.betResult!=='cancel'&&item.betResult!=='pending'){
@@ -1097,7 +1097,7 @@ function saveModal() {
 // ── 경기기록 렌더 ──
 function renderRecords(){
   const el=document.getElementById('records-list');
-  const days=[...DATA].reverse();
+  const days=[...DATA].sort((a,b)=>b.date.localeCompare(a.date));
   if(!days.length){el.innerHTML='<div class="empty">📝 기록 없음</div>';return;}
   el.innerHTML=days.map(d=>{
     const dayIdx=DATA.indexOf(d);
@@ -1119,7 +1119,7 @@ function renderRecords(){
 
 // ── 베팅내역 렌더 ──
 function renderBetting(){
-  const uHtml=[...DATA.keys()].reverse().map(i=>{
+  const uHtml=[...DATA.keys()].sort((a,b)=>DATA[b].date.localeCompare(DATA[a].date)).map(i=>{
     const d=DATA[i],item=d.unanimousBet;
     if(!item)return'';
     const games=item.customGames||getUnanimousGames(d);
@@ -1140,7 +1140,7 @@ function renderBetting(){
       </div></div>`;
   }).join('');
 
-  const a5Html=[...DATA.keys()].reverse().map(i=>{
+  const a5Html=[...DATA.keys()].sort((a,b)=>DATA[b].date.localeCompare(DATA[a].date)).map(i=>{
     const d=DATA[i],bets=d.allFiveBets||[];
     if(!bets.length)return'';
     return bets.map((item,bi)=>{
@@ -1163,7 +1163,7 @@ function renderBetting(){
     }).join('');
   }).join('');
 
-  const sHtml=[...DATA.keys()].reverse().map(i=>{
+  const sHtml=[...DATA.keys()].sort((a,b)=>DATA[b].date.localeCompare(DATA[a].date)).map(i=>{
     const d=DATA[i],bets=d.singleBets||[];
     if(!bets.length)return'';
     return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
