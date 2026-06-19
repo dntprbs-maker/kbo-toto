@@ -581,8 +581,8 @@ function showAccDetail(type){
 
   // 테이블 행
   const tableRows=rows.map(r=>{
-    const stColor=r.st==='hit'?'var(--green)':'var(--red)';
-    const stText=r.st==='hit'?'✅ 적중':'❌ 미적중';
+    const stColor=r.st==='hit'?'var(--green)':r.st==='cancel'?'var(--gold)':'var(--red)';
+    const stText=r.st==='hit'?'✅ 적중':r.st==='cancel'?'🟡 무승부':'❌ 미적중';
     const profitColor=(r.profit||0)>=0?'var(--green)':'var(--red)';
     const tdStyle='padding:9px 6px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.04);';
     // all 타입이면 날짜 옆에 유형 표시
