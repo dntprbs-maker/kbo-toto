@@ -862,7 +862,7 @@ function renderToday(){
 
   html+=`<div class="sec" style="margin-top:0;">⚾ 경기별 현황</div>`;
   todayData.games.forEach(g=>{
-    const rs=g.result===null?'pending':g.result==='취소'?'cancel':g.pick===g.result?'hit':'miss';
+    const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.pick===g.result?'hit':'miss';
     const rsText={'pending':'⏳ 대기','hit':'✅ 적중','miss':'❌ 미적중','cancel':'취소'}[rs];
     const rsColor={'pending':'var(--gray)','hit':'var(--green)','miss':'var(--red)','cancel':'var(--gold)'}[rs];
     html+=`<div class="today-game-card">
@@ -1104,7 +1104,7 @@ function renderRecords(){
     const dayIdx=DATA.indexOf(d);
     const rows=d.games.map(g=>{
       const unani=isUnanimous(g);
-      const rs=g.result===null?'pending':g.result==='취소'?'cancel':g.pick===g.result?'hit':'miss';
+      const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.pick===g.result?'hit':'miss';
       return`<tr><td class="col-match">${g.matchup}${unani?'<span class="unani-dot"></span>':''}</td><td class="col-ai1">${g.ai1}</td><td class="col-ai2">${g.ai2}</td><td class="col-ai3">${g.ai3}</td><td class="col-pick">${g.pick}</td><td class="col-result td-result-${rs}">${g.result||'대기'}</td></tr>`;
     }).join('');
     return`<div class="day-card"><div class="day-header">
@@ -1136,7 +1136,7 @@ function renderBetting(){
       </div>
       <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${games.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원 ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*(item.odds-1)).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}</span></div>
       </div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
-      ${games.map(g=>{const rs=g.result===null?'pending':g.result==='취소'?'cancel':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
+      ${games.map(g=>{const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
       ${status!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${status==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">${status==='pending'?'-':fmt(-item.amount)}</span></div>`:''}
       </div></div>`;
   }).join('');
@@ -1158,7 +1158,7 @@ function renderBetting(){
         </div>
         <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${dg.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원 ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*(item.odds-1)).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}</span></div>
         </div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
-        ${dg.map((g,gi)=>{const rs=g.result===null?'pending':g.result==='취소'?'cancel':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${labels[gi]||g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
+        ${dg.map((g,gi)=>{const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${labels[gi]||g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
         ${status!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${status==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">${status==='pending'?'-':fmt(-item.amount)}</span></div>`:''}
         </div></div>`;
     }).join('');
