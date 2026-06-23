@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>스탯티즈 승부예측 기록부</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0f1e;--bg2:#111827;--card:#1a2235;--border:#1e3250;--gold:#f5a623;--gold2:#ffd166;--green:#06d6a0;--red:#ef476f;--blue:#118ab2;--gray:#6b7280;--light:#e2e8f0;--white:#ffffff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--light);min-height:100vh;}
+header{background:linear-gradient(135deg,#060d1a 0%,#0f1f3d 100%);border-bottom:2px solid var(--gold);padding:14px 20px;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;gap:10px;}
+.logo{font-size:22px;font-weight:900;color:var(--gold);letter-spacing:-1px;}
+.subtitle{font-size:11px;color:var(--gray);margin-top:2px;}
+.back-btn{margin-left:auto;background:rgba(245,166,35,0.15);border:1px solid var(--gold);color:var(--gold);padding:6px 12px;border-radius:6px;font-size:12px;text-decoration:none;}
+.container{max-width:700px;margin:0 auto;padding:16px;}
+
+/* 요약 카드 */
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.summary-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+.summary-card .val{font-size:22px;font-weight:900;color:var(--gold);}
+.summary-card .lbl{font-size:11px;color:var(--gray);margin-top:4px;}
+
+/* 탭 */
+.tabs{display:flex;gap:8px;margin-bottom:16px;}
+.tab{flex:1;padding:8px;text-align:center;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--gray);}
+.tab.active{background:rgba(245,166,35,0.15);border-color:var(--gold);color:var(--gold);}
+
+/* 날짜 카드 */
+.day-card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+.day-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
+.day-date{font-size:15px;font-weight:700;color:var(--gold);}
+.day-result{font-size:12px;color:var(--gray);}
+
+/* 테이블 */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap;}
+th{font-size:10px;font-weight:700;padding:6px 8px;text-align:center;border-bottom:2px solid var(--border);color:var(--gray);}
+td{padding:7px 8px;text-align:center;border-bottom:1px solid rgba(30,50,80,0.5);}
+.col-match{text-align:left;padding-left:12px;color:var(--light);font-weight:600;}
+.col-pick{color:var(--gold);font-weight:700;}
+.col-prob{color:var(--blue);}
+.hit{color:var(--green);font-weight:900;}
+.miss{color:var(--red);font-weight:900;}
+.pending{color:var(--gray);}
+
+/* 비교 섹션 */
+.compare-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;}
+.compare-title{font-size:14px;font-weight:700;color:var(--gold);margin-bottom:12px;}
+.compare-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
+.compare-row:last-child{border-bottom:none;}
+.compare-label{font-size:12px;color:var(--gray);}
+.compare-val{font-size:14px;font-weight:700;}
+.val-3ai{color:var(--blue);}
+.val-statiz{color:var(--gold);}
+.val-win{color:var(--green);}
+.val-draw{color:var(--gray);}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="logo">📊 스탯티즈 예측</div>
+      <div class="subtitle">STATIZ 승부예측 별도 기록부</div>
+    </div>
+    <a href="index.html" class="back-btn">← 메인으로</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- 요약 -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="val" id="total-games">0</div>
+      <div class="lbl">총 예측 경기</div>
+    </div>
+    <div class="summary-card">
+      <div class="val" id="hit-count">0</div>
+      <div class="lbl">적중 경기</div>
+    </div>
+    <div class="summary-card">
+      <div class="val" id="hit-rate">0%</div>
+      <div class="lbl">적중률</div>
+    </div>
+  </div>
+
+  <!-- 탭 -->
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('records')">📋 예측 기록</div>
+    <div class="tab" onclick="showTab('compare')">⚔️ 3AI vs 스탯티즈</div>
+  </div>
+
+  <!-- 예측 기록 탭 -->
+  <div id="tab-records">
+    <div id="records-container"></div>
+  </div>
+
+  <!-- 비교 탭 -->
+  <div id="tab-compare" style="display:none;">
+    <div class="compare-card">
+      <div class="compare-title">⚔️ 3AI vs 스탯티즈 적중률 비교</div>
+      <div class="compare-row">
+        <div class="compare-label">3AI 적중률</div>
+        <div class="compare-val val-3ai" id="compare-3ai">집계 중...</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">스탯티즈 적중률</div>
+        <div class="compare-val val-statiz" id="compare-statiz">집계 중...</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">현재 우세</div>
+        <div class="compare-val val-win" id="compare-winner">-</div>
+      </div>
+    </div>
+    <div id="compare-detail"></div>
+  </div>
+
+</div>
+
+<script>
+// ── 스탯티즈 예측 데이터 ──
+const STATIZ_DATA = [
+  {
+    date: "2026-06-23",
+    games: [
+      {matchup:"KIA vs 키움", pick:"KIA", prob:64.0, result:null},
+      {matchup:"삼성 vs LG",  pick:"LG",  prob:51.4, result:null},
+      {matchup:"NC vs 롯데",  pick:"NC",  prob:57.1, result:null},
+      {matchup:"두산 vs 한화",pick:"한화",prob:59.7, result:null},
+      {matchup:"SSG vs KT",  pick:"KT",  prob:56.7, result:null},
+    ]
+  },
+];
+
+// ── 탭 전환 ──
+function showTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active', (i===0&&name==='records')||(i===1&&name==='compare'));
+  });
+  document.getElementById('tab-records').style.display = name==='records'?'':'none';
+  document.getElementById('tab-compare').style.display  = name==='compare'?'':'none';
+}
+
+// ── 결과 클래스 ──
+function resultClass(pick, result){
+  if(result===null) return 'pending';
+  if(result==='무승부'||result==='취소') return 'pending';
+  return pick===result ? 'hit' : 'miss';
+}
+function resultText(pick, result){
+  if(result===null) return '대기';
+  if(result==='무승부'||result==='취소') return '무효';
+  return pick===result ? '✅ 적중' : '❌ 실패';
+}
+
+// ── 요약 계산 ──
+function calcSummary(){
+  let total=0, hits=0;
+  STATIZ_DATA.forEach(d=>{
+    d.games.forEach(g=>{
+      if(g.result===null||g.result==='무승부'||g.result==='취소') return;
+      total++;
+      if(g.pick===g.result) hits++;
+    });
+  });
+  document.getElementById('total-games').textContent = total;
+  document.getElementById('hit-count').textContent = hits;
+  document.getElementById('hit-rate').textContent = total>0 ? Math.round(hits/total*100)+'%' : '-';
+  return {total, hits, rate: total>0 ? hits/total*100 : 0};
+}
+
+// ── 기록 렌더 ──
+function renderRecords(){
+  const sorted = [...STATIZ_DATA].sort((a,b)=>b.date.localeCompare(a.date));
+  const el = document.getElementById('records-container');
+  if(!sorted.length){ el.innerHTML='<div style="text-align:center;color:var(--gray);padding:40px;">기록 없음</div>'; return; }
+
+  el.innerHTML = sorted.map(d=>{
+    const hits = d.games.filter(g=>g.result&&g.result!=='무승부'&&g.result!=='취소'&&g.pick===g.result).length;
+    const done = d.games.filter(g=>g.result&&g.result!=='무승부'&&g.result!=='취소').length;
+    const rows = d.games.map(g=>`
+      <tr>
+        <td class="col-match">${g.matchup}</td>
+        <td class="col-pick">${g.pick}</td>
+        <td class="col-prob">${g.prob}%</td>
+        <td class="${resultClass(g.pick,g.result)}">${resultText(g.pick,g.result)}</td>
+      </tr>`).join('');
+    return `
+      <div class="day-card">
+        <div class="day-header">
+          <span class="day-date">📅 ${d.date}</span>
+          <span class="day-result">${done>0?hits+'/'+done+' 적중':'결과 대기'}</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="text-align:left;padding-left:12px;">경기</th>
+              <th>스탯티즈 픽</th>
+              <th>예측 확률</th>
+              <th>결과</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── 비교 렌더 ──
+function renderCompare(){
+  const stat = calcSummary();
+  // 3AI 데이터는 추후 연동 예정 — 지금은 안내 텍스트
+  document.getElementById('compare-3ai').textContent = '데이터 누적 중...';
+  document.getElementById('compare-statiz').textContent = stat.total>0 ? Math.round(stat.rate)+'%' : '대기 중';
+  document.getElementById('compare-winner').textContent = '한 달 후 공개 🎯';
+
+  document.getElementById('compare-detail').innerHTML = `
+    <div class="compare-card">
+      <div class="compare-title">📌 안내</div>
+      <p style="font-size:12px;color:var(--gray);line-height:1.8;">
+        스탯티즈 예측과 3AI 예측 데이터가 30회 이상 쌓이면<br>
+        정확한 적중률 비교가 가능해요.<br>
+        매일 아빠가 스탯티즈 예측을 캡처해주시면<br>
+        별이가 여기에 기록할게요! 🙏
+      </p>
+    </div>`;
+}
+
+// ── 초기화 ──
+calcSummary();
+renderRecords();
+renderCompare();
+</script>
+</body>
+</html>
