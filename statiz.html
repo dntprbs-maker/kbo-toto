@@ -126,11 +126,19 @@ const STATIZ_DATA = [
   {
     date: "2026-06-23",
     games: [
-      {matchup:"KIA vs 키움", pick:"KIA", prob:64.0, result:null},
       {matchup:"삼성 vs LG",  pick:"LG",  prob:51.4, result:null},
       {matchup:"NC vs 롯데",  pick:"NC",  prob:57.1, result:null},
-      {matchup:"두산 vs 한화",pick:"한화",prob:59.7, result:null},
       {matchup:"SSG vs KT",  pick:"KT",  prob:56.7, result:null},
+      {matchup:"두산 vs 한화",pick:"한화",prob:59.7, result:null},
+      {matchup:"키움 vs KIA", pick:"KIA", prob:64.0, result:null},
+    ],
+    allFiveBets:[{label:"도전경기",odds:6.4,amount:100,betResult:"pending",pickLabels:["LG승","NC승","KT승","한화승","KIA승"]}],
+    singleBets:[
+      {matchup:"삼성 vs LG",  pick:"LG",  odds:1.67, amount:100, betResult:"pending", result:null},
+      {matchup:"NC vs 롯데",  pick:"NC",  odds:1.49, amount:100, betResult:"pending", result:null},
+      {matchup:"SSG vs KT",  pick:"KT",  odds:1.50, amount:100, betResult:"pending", result:null},
+      {matchup:"두산 vs 한화",pick:"한화",odds:1.39, amount:100, betResult:"pending", result:null},
+      {matchup:"키움 vs KIA", pick:"KIA", odds:1.23, amount:100, betResult:"pending", result:null},
     ]
   },
 ];
@@ -188,6 +196,22 @@ function renderRecords(){
         <td class="col-prob">${g.prob}%</td>
         <td class="${resultClass(g.pick,g.result)}">${resultText(g.pick,g.result)}</td>
       </tr>`).join('');
+    // 도전경기 베팅
+    const fiveBetHtml = (d.allFiveBets||[]).map(b=>{
+      const bc = b.betResult==='hit'?'hit':b.betResult==='miss'?'miss':b.betResult==='cancel'?'pending':'pending';
+      const bt = b.betResult==='hit'?'✅ 적중':b.betResult==='miss'?'❌ 실패':b.betResult==='cancel'?'🟡 무효':'⏳ 대기';
+      const profit = b.betResult==='hit'?'+'+Math.round(b.amount*(b.odds-1))+'원':b.betResult==='miss'?'-'+b.amount+'원':'-';
+      return `<tr><td class="col-match">도전경기(5조합)</td><td class="col-pick">${b.pickLabels.join('·')}</td><td class="col-prob">${b.odds}배</td><td class="${bc}">${bt} ${profit}</td></tr>`;
+    }).join('');
+
+    // 단독베팅
+    const singleHtml = (d.singleBets||[]).map(b=>{
+      const bc = b.betResult==='hit'?'hit':b.betResult==='miss'?'miss':b.betResult==='cancel'?'pending':'pending';
+      const bt = b.betResult==='hit'?'✅ 적중':b.betResult==='miss'?'❌ 실패':b.betResult==='cancel'?'🟡 무효':'⏳ 대기';
+      const profit = b.betResult==='hit'?'+'+Math.round(b.amount*(b.odds-1))+'원':b.betResult==='miss'?'-'+b.amount+'원':'-';
+      return `<tr><td class="col-match">${b.matchup}</td><td class="col-pick">${b.pick}</td><td class="col-prob">${b.odds}배</td><td class="${bc}">${bt} ${profit}</td></tr>`;
+    }).join('');
+
     return `
       <div class="day-card">
         <div class="day-header">
@@ -205,6 +229,21 @@ function renderRecords(){
             <tbody>${rows}</tbody>
           </table>
         </div>
+        ${fiveBetHtml||singleHtml?`
+        <div style="border-top:2px solid var(--border);padding:8px 0 0;">
+          <div style="padding:6px 12px;font-size:11px;font-weight:700;color:var(--gold);">💰 베팅 내역</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th style="text-align:left;padding-left:12px;">경기</th>
+                <th>픽</th>
+                <th>배당</th>
+                <th>결과</th>
+              </tr></thead>
+              <tbody>${fiveBetHtml}${singleHtml}</tbody>
+            </table>
+          </div>
+        </div>`:''}
       </div>`;
   }).join('');
 }
