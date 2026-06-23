@@ -352,19 +352,19 @@ canvas{width:100%!important;}
 <script>
 const DATA=[
   {date:"2026-06-23",games:[
-    {matchup:"삼성 vs LG",  ai1:"LG",  ai2:"LG",  ai3:"LG",  pick:"LG",  result:null},
-    {matchup:"NC vs 롯데",  ai1:"NC",  ai2:"NC",  ai3:"NC",  pick:"NC",  result:null},
-    {matchup:"SSG vs KT",   ai1:"KT",  ai2:"KT",  ai3:"KT",  pick:"KT",  result:null},
-    {matchup:"두산 vs 한화",ai1:"한화",ai2:"한화",ai3:"한화",pick:"한화",result:null},
-    {matchup:"키움 vs KIA", ai1:"KIA", ai2:"KIA", ai3:"KIA", pick:"KIA", result:null},
+    {matchup:"삼성 vs LG",  ai1:"LG",  ai2:"LG",  ai3:"LG",  pick:"LG",  result:"LG"},
+    {matchup:"NC vs 롯데",  ai1:"NC",  ai2:"NC",  ai3:"NC",  pick:"NC",  result:"롯데"},
+    {matchup:"SSG vs KT",   ai1:"KT",  ai2:"KT",  ai3:"KT",  pick:"KT",  result:"KT"},
+    {matchup:"두산 vs 한화",ai1:"한화",ai2:"한화",ai3:"한화",pick:"한화",result:"한화"},
+    {matchup:"키움 vs KIA", ai1:"KIA", ai2:"KIA", ai3:"KIA", pick:"KIA", result:"KIA"},
   ],unanimousBet:null,
-  allFiveBets:[{label:"도전경기",odds:6.4,amount:100,betResult:"pending",pickLabels:["LG승","NC승","KT승","한화승","KIA승"]}],
+  allFiveBets:[{label:"도전경기",odds:6.4,amount:100,betResult:"miss",pickLabels:["LG승","NC승","KT승","한화승","KIA승"]}],
   singleBets:[
-    {matchup:"삼성 vs LG",  pick:"LG",  odds:1.67,amount:100,betResult:"pending",result:null},
-    {matchup:"NC vs 롯데",  pick:"NC",  odds:1.49,amount:100,betResult:"pending",result:null},
-    {matchup:"SSG vs KT",   pick:"KT",  odds:1.50,amount:100,betResult:"pending",result:null},
-    {matchup:"두산 vs 한화",pick:"한화",odds:1.39,amount:100,betResult:"pending",result:null},
-    {matchup:"키움 vs KIA", pick:"KIA", odds:1.23,amount:100,betResult:"pending",result:null},
+    {matchup:"삼성 vs LG",  pick:"LG",  odds:1.67,amount:100,betResult:"hit",result:"LG"},
+    {matchup:"NC vs 롯데",  pick:"NC",  odds:1.49,amount:100,betResult:"miss",result:"롯데"},
+    {matchup:"SSG vs KT",   pick:"KT",  odds:1.50,amount:100,betResult:"hit",result:"KT"},
+    {matchup:"두산 vs 한화",pick:"한화",odds:1.39,amount:100,betResult:"hit",result:"한화"},
+    {matchup:"키움 vs KIA", pick:"KIA", odds:1.23,amount:100,betResult:"hit",result:"KIA"},
   ]},
 ];
 
