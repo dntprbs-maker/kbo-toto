@@ -6,17 +6,17 @@
 <title>⚾ KBO 토토 투자기록부 2026</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&display=swap');
-:root{--bg:#0a0f1e;--bg2:#111827;--card:#1a2235;--border:#1e3250;--gold:#f5a623;--gold2:#ffd166;--green:#06d6a0;--red:#ef476f;--blue:#118ab2;--gray:#6b7280;--light:#e2e8f0;--white:#ffffff;--h-header:52px;}
+:root{--bg:#0a1a0f;--bg2:#0f1f12;--card:#1a2d1e;--border:#1e4028;--gold:#39d353;--gold2:#56e87a;--green:#06d6a0;--red:#ef476f;--blue:#118ab2;--gray:#6b7280;--light:#e2e8f0;--white:#ffffff;--h-header:52px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--light);min-height:100vh;}
-header{background:linear-gradient(135deg,#060d1a 0%,#0f1f3d 100%);border-bottom:2px solid var(--gold);padding:14px 20px;position:sticky;top:0;z-index:100;height:var(--h-header);box-sizing:border-box;}
+header{background:linear-gradient(135deg,#061a09 0%,#0f3d1a 100%);border-bottom:2px solid var(--gold);padding:14px 20px;position:sticky;top:0;z-index:100;height:var(--h-header);box-sizing:border-box;}
 .header-inner{max-width:100%;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
 .logo{font-family:'Black Han Sans',sans-serif;font-size:22px;color:var(--gold);letter-spacing:1px;}
 .logo em{color:var(--white);font-style:normal;}
 .header-sub{font-size:11px;color:var(--gray);}
 .tabs{max-width:100%;margin:0 auto;padding:10px 12px 0;display:flex;gap:6px;position:sticky;top:var(--h-header);z-index:90;background:var(--bg);}
 .tab{flex:1;padding:10px 6px;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px 10px 0 0;cursor:pointer;font-size:12px;font-weight:700;color:var(--gray);transition:all .25s;border-top:3px solid transparent;}
-.tab.active{background:linear-gradient(180deg,rgba(245,166,35,0.15) 0%,var(--bg2) 100%);border-color:var(--gold) var(--border) var(--bg2) var(--border);border-top:3px solid var(--gold);color:var(--gold2);font-weight:900;text-shadow:0 0 12px rgba(245,166,35,0.5);box-shadow:0 -2px 12px rgba(245,166,35,0.15);}
+.tab.active{background:linear-gradient(180deg,rgba(57,211,83,0.15) 0%,var(--bg2) 100%);border-color:var(--gold) var(--border) var(--bg2) var(--border);border-top:3px solid var(--gold);color:var(--gold2);font-weight:900;text-shadow:0 0 12px rgba(245,166,35,0.5);box-shadow:0 -2px 12px rgba(57,211,83,0.15);}
 main{max-width:100%;margin:0 auto;padding:0 12px 60px;overflow-x:hidden;}
 .panel{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:0 0 14px 14px;padding:20px;}
 .panel.active{display:block;}
@@ -36,7 +36,7 @@ main{max-width:100%;margin:0 auto;padding:0 12px 60px;overflow-x:hidden;}
 .dash-menu-title{font-size:13px;font-weight:900;color:var(--light);margin-bottom:4px;}
 .dash-menu-desc{font-size:10px;color:var(--gray);line-height:1.4;}
 .dash-menu-badge{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
-.dash-menu-card.c1 .dash-menu-badge{background:rgba(245,166,35,0.15);color:var(--gold);}
+.dash-menu-card.c1 .dash-menu-badge{background:rgba(57,211,83,0.15);color:var(--gold);}
 .dash-menu-card.c2 .dash-menu-badge{background:rgba(6,214,160,0.15);color:var(--green);}
 .dash-menu-card.c3 .dash-menu-badge{background:rgba(91,168,255,0.15);color:#5ba8ff;}
 .dash-menu-card.c4 .dash-menu-badge{background:rgba(239,71,111,0.15);color:var(--red);}
@@ -129,14 +129,14 @@ canvas{width:100%!important;}
 .games-table .th-group{font-size:9px;font-weight:700;letter-spacing:1px;padding:4px 6px;text-align:center;border-bottom:none;}
 .games-table .th-group.group-match{background:transparent;}
 .games-table .th-group.group-ai{background:rgba(91,168,255,0.12);color:#5ba8ff;border-radius:4px 4px 0 0;}
-.games-table .th-group.group-pick{background:rgba(245,166,35,0.10);}
+.games-table .th-group.group-pick{background:rgba(57,211,83,0.10);}
 .games-table .th-group.group-result{background:rgba(6,214,160,0.10);}
 .games-table th{font-size:9px;font-weight:700;padding:4px 4px;text-align:center;border-bottom:2px solid var(--border);white-space:nowrap;}
 .games-table th.col-match{background:rgba(255,255,255,0.04);color:var(--light);text-align:left;padding-left:8px;border-right:1px solid var(--border);max-width:100px;min-width:80px;}
 .games-table th.col-ai1{background:rgba(91,168,255,0.10);color:#7ec8ff;}
 .games-table th.col-ai2{background:rgba(91,168,255,0.14);color:#5ba8ff;}
 .games-table th.col-ai3{background:rgba(91,168,255,0.10);color:#7ec8ff;border-right:2px solid var(--border);padding-right:4px;}
-.games-table th.col-pick{background:rgba(245,166,35,0.12);color:var(--gold);border-right:1px solid var(--border);padding-left:4px;}
+.games-table th.col-pick{background:rgba(57,211,83,0.12);color:var(--gold);border-right:1px solid var(--border);padding-left:4px;}
 .games-table th.col-result{background:rgba(6,214,160,0.10);color:var(--green);}
 .games-table td{padding:6px 4px;text-align:center;border-bottom:1px solid rgba(30,50,80,.4);font-size:11px;white-space:nowrap;}
 .games-table td.col-match{text-align:left;padding-left:20px;font-weight:700;color:var(--light);border-right:1px solid var(--border);}
