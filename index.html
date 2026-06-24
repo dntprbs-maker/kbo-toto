@@ -565,10 +565,12 @@ function showAccDetail(type){
       });
     }
     if(type==='single'||type==='all'){
-      (d.singleBets||[]).filter(b=>b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
-        const profit=getProfit(item);
-        rows.push({date:d.date.slice(5),label:`1️⃣ ${item.matchup}`,st:item.betResult,odds:item.odds,profit});
-      });
+      const sBets=(d.singleBets||[]).filter(b=>b.betResult!=='cancel'&&b.betResult!=='pending');
+      if(sBets.length){
+        const dayProfit=sBets.reduce((s,b)=>s+getProfit(b),0);
+        const dayHits=sBets.filter(b=>b.betResult==='hit').length;
+        rows.push({date:d.date.slice(5),label:`1️⃣ 단독베팅 (${dayHits}/${sBets.length}적중)`,st:dayProfit>0?'hit':dayProfit<0?'miss':'pending',odds:null,profit:dayProfit,isDay:true,bets:sBets});
+      }
     }
   });
 
@@ -612,10 +614,11 @@ function showAccDetail(type){
     const dateCell=type==='all'
       ?`<td style="${tdStyle}font-weight:700;"><div>${r.date}</div><div style="font-size:10px;color:var(--gray);margin-top:1px;">${r.label}</div></td>`
       :`<td style="${tdStyle}font-weight:700;">${r.date}</td>`;
+    const oddsCell=r.odds?`${r.odds}배`:(r.isDay?`${r.bets?r.bets.length:'-'}경기`:'-');
     return`<tr>
       ${dateCell}
       <td style="${tdStyle}text-align:center;font-weight:900;color:${stColor}">${stText}</td>
-      <td style="${tdStyle}text-align:center;color:var(--gold2);">${r.odds}배</td>
+      <td style="${tdStyle}text-align:center;color:var(--gold2);">${oddsCell}</td>
       <td style="${tdStyle}text-align:right;font-weight:900;color:${profitColor}">${fmt(r.profit)}</td>
     </tr>`;
   }).join('');
@@ -1190,11 +1193,18 @@ function renderBetting(){
   const sHtml=[...DATA.keys()].sort((a,b)=>DATA[b].date.localeCompare(DATA[a].date)).map(i=>{
     const d=DATA[i],bets=d.singleBets||[];
     if(!bets.length)return'';
+    const totalBet=bets.reduce((s,b)=>s+b.amount,0);
+    const totalProfit=bets.reduce((s,b)=>{const st=b.betResult!=='pending'?b.betResult:(b.result===null?'pending':b.result==='취소'?'cancel':b.pick===b.result?'hit':'miss');return s+(st==='hit'?Math.round(b.amount*(b.odds-1)):st==='miss'?-b.amount:0);},0);
+    const hits=bets.filter(b=>(b.betResult!=='pending'?b.betResult:(b.result===null?'pending':b.pick===b.result?'hit':'miss'))==='hit').length;
+    const done=bets.filter(b=>b.result!==null&&b.result!=='취소').length;
+    const profitHtml=done>0?(totalProfit>=0?`<strong style="color:var(--green)">📈 +${totalProfit.toLocaleString()}원</strong>`:`<span style="color:#ff6b6b">📉 ${totalProfit.toLocaleString()}원</span>`):`<span style="color:#6b9fce">대기중</span>`;
     return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
       <div class="bet-card-header-row1">
-        <span class="day-date">📅 ${d.date}</span>
+        <span class="day-date">📅 ${d.date} <span style="font-size:10px;font-weight:700;color:#5ba8ff;background:rgba(91,168,255,0.10);border-radius:6px;padding:2px 8px;">단독베팅</span></span>
         <button class="edit-btn" onclick="openEditModal('single',${i},0)">✏️ 전체수정</button>
-      </div></div>
+      </div>
+      <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${bets.length}경기 / 베팅 ${totalBet.toLocaleString()}원 / 적중 ${hits}/${done} / ${profitHtml}</span></div>
+      </div>
       <div class="day-body"><div class="game-list-header"><span class="col-match">매치업 / 픽</span><span class="col-pick">배당</span><span class="col-result">결과</span></div>
       ${bets.map((b,bi)=>{
         const rs=b.result===null?'pending':b.result==='취소'?'cancel':b.pick===b.result?'hit':'miss';
