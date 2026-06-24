@@ -569,7 +569,7 @@ function showAccDetail(type){
       if(sBets.length){
         const dayProfit=sBets.reduce((s,b)=>s+getProfit(b),0);
         const dayHits=sBets.filter(b=>b.betResult==='hit').length;
-        rows.push({date:d.date.slice(5),label:`1️⃣ 단독베팅 (${dayHits}/${sBets.length}적중)`,st:dayProfit>0?'hit':dayProfit<0?'miss':'pending',odds:null,profit:dayProfit,isDay:true,bets:sBets});
+        rows.push({date:d.date.slice(5),label:`1️⃣ 단독베팅`,st:'single',odds:null,profit:dayProfit,isDay:true,bets:sBets,hits:dayHits,total:sBets.length});
       }
     }
   });
@@ -606,8 +606,8 @@ function showAccDetail(type){
 
   // 테이블 행
   const tableRows=rows.map(r=>{
-    const stColor=r.st==='hit'?'var(--green)':r.st==='cancel'?'var(--gold)':'var(--red)';
-    const stText=r.st==='hit'?'✅ 적중':r.st==='cancel'?'🟡 무승부':'❌ 미적중';
+    const stColor=r.st==='hit'?'var(--green)':r.st==='cancel'?'var(--gold)':r.st==='single'?(r.profit>=0?'var(--green)':'var(--red)'):'var(--red)';
+    const stText=r.st==='hit'?'✅ 적중':r.st==='cancel'?'🟡 무승부':r.st==='single'?`${r.hits}/${r.total}`:'❌ 미적중';
     const profitColor=(r.profit||0)>=0?'var(--green)':'var(--red)';
     const tdStyle='padding:9px 6px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.04);';
     // all 타입이면 날짜 옆에 유형 표시
@@ -1203,7 +1203,7 @@ function renderBetting(){
         <span class="day-date">📅 ${d.date} <span style="font-size:10px;font-weight:700;color:#5ba8ff;background:rgba(91,168,255,0.10);border-radius:6px;padding:2px 8px;">단독베팅</span></span>
         <button class="edit-btn" onclick="openEditModal('single',${i},0)">✏️ 전체수정</button>
       </div>
-      <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${bets.length}경기 / 베팅 ${totalBet.toLocaleString()}원 / 적중 ${hits}/${done} / ${profitHtml}</span></div>
+      <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${bets.length}경기 / 베팅 ${totalBet.toLocaleString()}원 / <strong>${hits}/${done}</strong> / ${profitHtml}</span></div>
       </div>
       <div class="day-body"><div class="game-list-header"><span class="col-match">매치업 / 픽</span><span class="col-pick">배당</span><span class="col-result">결과</span></div>
       ${bets.map((b,bi)=>{
