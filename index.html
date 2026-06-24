@@ -1224,7 +1224,7 @@ function filterBetType(type){
 }
 
 function showTab(id){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.getAttribute('onclick')==="showTab('"+id+"')"));
+  document.querySelectorAll('.tab[onclick]').forEach(t=>t.classList.toggle('active',t.getAttribute('onclick')==="showTab('"+id+"')"));
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+id));
   document.getElementById('bet-filter-sticky').style.display=id==='betting'?'block':'none';
   if(id==='records')renderRecords();
