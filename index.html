@@ -1201,6 +1201,7 @@ function renderBetting(){
       ${status!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${status==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">${status==='pending'?'-':fmt(-item.amount)}</span></div>`:''}
       </div></div>`;
   }).join('');
+  document.getElementById('unanimous-list').innerHTML=uHtml||'<div class="empty">📝 만장일치 베팅 내역이 없습니다.</div>';
 
   renderAllfiveList();
 
