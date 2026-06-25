@@ -1284,3 +1284,18 @@ function renderAllfiveList(){
   document.getElementById('allfive-list').innerHTML=html||'<div class="empty">📝 도전경기 베팅 내역이 없습니다.</div>';
 }
 
+function showTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['dashboard','records','betting'][i]===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+id));
+  document.getElementById('bet-filter-sticky').style.display=id==='betting'?'block':'none';
+  if(id==='records')renderRecords();
+  if(id==='betting')renderBetting();
+  if(id==='dashboard'){showMain();}
+}
+
+// 초기화
+showMain();
+renderRecords();
+</script>
+</body>
+</html>
