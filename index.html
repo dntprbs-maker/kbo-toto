@@ -870,13 +870,21 @@ function renderPattern(){
   const teamList=Object.entries(teamMap).map(([t,v])=>({
     team:t,rate:v.total?Math.round(v.hit/v.total*100):0,hit:v.hit,total:v.total
   })).filter(t=>t.total>=2).sort((a,b)=>b.rate-a.rate);
+  // KBO 10팀 중 픽 2회 미만(기록 없음) 팀 추가
+  const allTeams=['KIA','LG','KT','한화','NC','삼성','키움','롯데','두산','SSG'];
+  const shownTeams=teamList.map(t=>t.team);
+  allTeams.forEach(t=>{
+    if(!shownTeams.includes(t)){
+      teamList.push({team:t,rate:-1,hit:0,total:0,noData:true});
+    }
+  });
 
   document.getElementById('pattern-team').innerHTML=`
     <div class="pattern-title">⚾ 팀별 픽 성공률 (2회 이상)</div>
     <div class="team-grid">
       ${teamList.map(t=>`<div class="team-item">
         <span class="team-name">${t.team}</span>
-        <span class="team-rate" style="color:${barC(t.rate)}">${t.rate}% <span style="font-size:10px;color:var(--gray);font-weight:400">${t.hit}/${t.total}</span></span>
+        ${t.noData?`<span class="team-rate" style="color:var(--gray);font-size:12px">기록 없음</span>`:`<span class="team-rate" style="color:${barC(t.rate)}">${t.rate}% <span style="font-size:10px;color:var(--gray);font-weight:400">${t.hit}/${t.total}</span></span>`}
       </div>`).join('')}
     </div>
   `;
