@@ -1272,7 +1272,7 @@ function renderAllfiveList(){
       }
       if(isBoth){ chipLabel=bothPick; } else { chipLabel=pickLabels[pickIdx]||g.pick; }
       pickIdx++;
-      const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.result===chipLabel?'hit':'miss';
+      const cleanPick=chipLabel.replace(/[승패무]$/,'');const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':(g.result===cleanPick||g.result===chipLabel)?'hit':'miss';
       return '<div class="game-row"><span class="game-matchup">'+g.matchup+'</span><span class="col-pick-cell"><span class="pick-chip" style="background:'+color+'22;color:'+color+';">'+chipLabel+'</span></span><span class="col-result-cell game-result '+rs+'">'+(g.result||'대기')+'</span></div>';
     }).join('');
     const profit=status==='hit'?Math.round(bet.amount*(bet.odds-1)):0;
