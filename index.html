@@ -1267,50 +1267,20 @@ function renderAllfiveList(){
       const isBoth=bothGame&&g.matchup===bothGame;
       let chipLabel='';
       if(isExcluded){
-        return\`<div class="game-row" style="opacity:0.3"><span class="game-matchup" style="text-decoration:line-through">\${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip" style="background:#333;color:#666">제외</span></span><span class="col-result-cell"></span></div>\`;
+        return '<div class="game-row" style="opacity:0.3"><span class="game-matchup" style="text-decoration:line-through">'+g.matchup+'</span><span class="col-pick-cell"><span class="pick-chip" style="background:#333;color:#666">제외</span></span><span class="col-result-cell"></span></div>';
       }
-      if(isBoth){
-        chipLabel=bothPick;
-      } else {
-        chipLabel=pickLabels[pickIdx]||g.pick;
-      }
+      if(isBoth){ chipLabel=bothPick; } else { chipLabel=pickLabels[pickIdx]||g.pick; }
       pickIdx++;
       const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.result===chipLabel?'hit':'miss';
-      return\`<div class="game-row"><span class="game-matchup">\${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip" style="background:\${color}22;color:\${color};">\${chipLabel}</span></span><span class="col-result-cell game-result \${rs}">\${g.result||'대기'}</span></div>\`;
+      return '<div class="game-row"><span class="game-matchup">'+g.matchup+'</span><span class="col-pick-cell"><span class="pick-chip" style="background:'+color+'22;color:'+color+';">'+chipLabel+'</span></span><span class="col-result-cell game-result '+rs+'">'+(g.result||'대기')+'</span></div>';
     }).join('');
-    const profitHtml=status==='hit'?\`/ <strong style="color:var(--green)">📈 +\${Math.round(bet.amount*(bet.odds-1)).toLocaleString()}원</strong>\`:\`/ <span style="color:#6b9fce">예상 \${Math.round(bet.amount*(bet.odds||0)).toLocaleString()}원</span>\`;
-    const lossHtml=status!=='hit'?\`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="\${status==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">\${status==='pending'?'-':fmt(-bet.amount)}</span></div>\`:'';
+    const profit=status==='hit'?Math.round(bet.amount*(bet.odds-1)):0;
+    const profitHtml=status==='hit'?'/ <strong style="color:var(--green)">📈 +'+profit.toLocaleString()+'원</strong>':'/ <span style="color:#6b9fce">예상 '+Math.round(bet.amount*(bet.odds||0)).toLocaleString()+'원</span>';
+    const lossHtml=status!=='hit'?'<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="'+(status==='pending'?'neu':'neg')+'" style="font-weight:900;font-size:13px">'+(status==='pending'?'-':fmt(-bet.amount))+'</span></div>':'';
     const badgeHtml=status==='hit'?'✅ 적중':status==='miss'?'❌ 미적중':status==='cancel'?'취소':'⏳ 대기중';
-    const bothNote=bothGame?\`<div style="margin-top:8px;font-size:11px;color:#a29bfe;background:rgba(162,155,254,0.08);padding:6px 10px;border-radius:6px;">↔️ <strong>\${bothGame}</strong> — 도전경기 반대픽 베팅</div>\`:'';
-    return\`<div class="day-card" style="margin-bottom:14px;border-left:3px solid \${color}"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
-      <div class="bet-card-header-row1">
-        <span class="day-date">📅 \${d.date} <span style="font-size:10px;font-weight:700;color:\${color};background:\${color}22;border-radius:6px;padding:2px 8px;">\${currentAfTab}</span></span>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="day-badge \${status}">\${badgeHtml}</span>
-          <button class="edit-btn" onclick="openEditModal('allfive',\${i},0)">✏️</button>
-        </div>
-      </div>
-      <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">\${pickLabels.length}경기 / 배당 <strong>\${bet.odds||'미정'}배</strong> / 베팅 \${bet.amount.toLocaleString()}원 \${profitHtml}</span></div>
-    </div><div class="day-body">
-      <div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
-      \${gameRows}\${bothNote}\${lossHtml}
-    </div></div>\`;
+    const bothNote=bothGame?'<div style="margin-top:8px;font-size:11px;color:#a29bfe;background:rgba(162,155,254,0.08);padding:6px 10px;border-radius:6px;">↔️ <strong>'+bothGame+'</strong> — 도전경기 반대픽 베팅</div>':'';
+    return '<div class="day-card" style="margin-bottom:14px;border-left:3px solid '+color+'"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;"><div class="bet-card-header-row1"><span class="day-date">📅 '+d.date+' <span style="font-size:10px;font-weight:700;color:'+color+';background:'+color+'22;border-radius:6px;padding:2px 8px;">'+currentAfTab+'</span></span><div style="display:flex;align-items:center;gap:8px;"><span class="day-badge '+status+'">'+badgeHtml+'</span><button class="edit-btn" onclick="openEditModal(\'allfive\','+i+',0)">✏️</button></div></div><div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">'+pickLabels.length+'경기 / 배당 <strong>'+(bet.odds||'미정')+'배</strong> / 베팅 '+bet.amount.toLocaleString()+'원 '+profitHtml+'</span></div></div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>'+gameRows+bothNote+lossHtml+'</div></div>';
   }).join('');
-  document.getElementById('allfive-list').innerHTML=html||'<div style="color:var(--gray);text-align:center;padding:20px;">데이터 없음</div>';
+  document.getElementById('allfive-list').innerHTML=html||'<div class="empty">📝 도전경기 베팅 내역이 없습니다.</div>';
 }
 
-function showTab(id){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['dashboard','records','betting'][i]===id));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+id));
-  document.getElementById('bet-filter-sticky').style.display=id==='betting'?'block':'none';
-  if(id==='records')renderRecords();
-  if(id==='betting')renderBetting();
-  if(id==='dashboard'){showMain();}
-}
-
-// 초기화
-showMain();
-renderRecords();
-</script>
-</body>
-</html>
