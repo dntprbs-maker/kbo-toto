@@ -419,6 +419,30 @@ const DATA=[
     {matchup:"KT vs SSG",pick:"KT",odds:1.6,amount:100,betResult:"hit",result:"KT"},
     {matchup:"LG vs 삼성",pick:"삼성",odds:1.6,amount:100,betResult:"hit",result:"삼성"},
   ]},
+  {date:"2026-06-26",games:[
+    {matchup:"KIA vs 두산",ai1:"두산",ai2:"KIA",ai3:"두산",pick:"두산",result:null},
+    {matchup:"LG vs 롯데",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG",result:null},
+    {matchup:"한화 vs SSG",ai1:"한화",ai2:"한화",ai3:"한화",pick:"한화",result:null},
+    {matchup:"KT vs 삼성",ai1:"KT",ai2:"KT",ai3:"삼성",pick:"KT",result:null},
+    {matchup:"키움 vs NC",ai1:"NC",ai2:"NC",ai3:"NC",pick:"NC",result:null},
+  ],
+  unanimousBet:{odds:0,amount:100,betResult:"pending",customGames:[
+    {matchup:"LG vs 롯데",pick:"LG",result:null},
+    {matchup:"한화 vs SSG",pick:"한화",result:null},
+    {matchup:"키움 vs NC",pick:"NC",result:null},
+  ]},
+  allFiveBets:[
+    {label:"도전경기(-)",odds:0,amount:100,betResult:"pending",pickLabels:["LG","한화","KT","NC"],excludedGame:"KIA vs 두산"},
+    {label:"도전경기",odds:0,amount:100,betResult:"pending",pickLabels:["두산","LG","한화","KT","NC"]},
+    {label:"도전경기(양방)",odds:0,amount:100,betResult:"pending",pickLabels:["KIA","LG","한화","KT","NC"],bothGame:"KIA vs 두산",bothPick:"KIA"},
+  ],
+  singleBets:[
+    {matchup:"KIA vs 두산",pick:"두산",odds:0,amount:100,betResult:"pending",result:null},
+    {matchup:"LG vs 롯데",pick:"LG",odds:0,amount:100,betResult:"pending",result:null},
+    {matchup:"한화 vs SSG",pick:"한화",odds:0,amount:100,betResult:"pending",result:null},
+    {matchup:"KT vs 삼성",pick:"KT",odds:0,amount:100,betResult:"pending",result:null},
+    {matchup:"키움 vs NC",pick:"NC",odds:0,amount:100,betResult:"pending",result:null},
+  ]},
 ];
 
 function isUnanimous(g){return g.ai1===g.ai2&&g.ai2===g.ai3;}
