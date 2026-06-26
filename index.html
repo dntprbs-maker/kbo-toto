@@ -601,7 +601,7 @@ function showAccDetail(type){
   document.getElementById('acc-main').style.display='none';
   document.getElementById('acc-detail').style.display='block';
 
-  const titleMap={unanimous:'🎯 만장일치 날짜별 기록',allfive:'⚡ 도전경기 날짜별 기록',single:'1️⃣ 단독베팅 날짜별 기록',all:'📋 전체 날짜별 기록'};
+  const titleMap={unanimous:'🎯 만장일치 날짜별 기록',allfive:'⚡ 도전경기 날짜별 기록',af_minus:'➖ 도전경기(-) 날짜별 기록',af_main:'⚡ 도전경기 날짜별 기록',af_both:'↔️ 도전경기(양방) 날짜별 기록',single:'1️⃣ 단독베팅 날짜별 기록',all:'📋 전체 날짜별 기록'};
   document.getElementById('acc-detail-title').textContent=titleMap[type]||'날짜별 기록';
 
   const done=DATA.filter(d=>d.unanimousBet.betResult!=='pending');
@@ -621,6 +621,21 @@ function showAccDetail(type){
       (d.allFiveBets||[]).filter(b=>b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
         const profit=getProfit(item);
         rows.push({date:d.date.slice(5),label:`⚡ ${item.label||'도전경기'}`,st:item.betResult,odds:item.odds,profit});
+      });
+    }
+    if(type==='af_minus'){
+      (d.allFiveBets||[]).filter(b=>b.label==='도전경기(-)'&&b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
+        rows.push({date:d.date.slice(5),label:'➖ 도전경기(-)',st:item.betResult,odds:item.odds,profit:getProfit(item)});
+      });
+    }
+    if(type==='af_main'){
+      (d.allFiveBets||[]).filter(b=>b.label==='도전경기'&&b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
+        rows.push({date:d.date.slice(5),label:'⚡ 도전경기',st:item.betResult,odds:item.odds,profit:getProfit(item)});
+      });
+    }
+    if(type==='af_both'){
+      (d.allFiveBets||[]).filter(b=>b.label==='도전경기(양방)'&&b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
+        rows.push({date:d.date.slice(5),label:'↔️ 도전경기(양방)',st:item.betResult,odds:item.odds,profit:getProfit(item)});
       });
     }
     if(type==='single'||type==='all'){
@@ -701,10 +716,15 @@ function renderAccuracy(){
   const uHit=uBets.filter(b=>b.betResult==='hit').length;
   const uRate=uBets.length?Math.round(uHit/uBets.length*100):0;
 
-  // 도전경기(5경기)
-  const a5All=done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.betResult!=='cancel'&&b.betResult!=='pending'));
+  // 도전경기 세 종류 분리
+  const afMinus =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기(-)'  &&b.betResult!=='cancel'&&b.betResult!=='pending'));
+  const afMain  =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기'     &&b.betResult!=='cancel'&&b.betResult!=='pending'));
+  const afBoth  =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기(양방)'&&b.betResult!=='cancel'&&b.betResult!=='pending'));
+  const a5All=[...afMinus,...afMain,...afBoth,...done.flatMap(d=>(d.allFiveBets||[]).filter(b=>{const l=b.label||'';return !['도전경기(-)','도전경기','도전경기(양방)'].includes(l)&&b.betResult!=='cancel'&&b.betResult!=='pending';}))];
   const a5Hit=a5All.filter(b=>b.betResult==='hit').length;
   const a5Rate=a5All.length?Math.round(a5Hit/a5All.length*100):0;
+  function calcSubRoi(arr){const inv=arr.reduce((s,b)=>s+b.amount,0);const prf=arr.reduce((s,b)=>s+(getProfit(b)||0),0);return inv>0?(prf/inv*100).toFixed(1):null;}
+  const afMinusRoi=calcSubRoi(afMinus);const afMainRoi=calcSubRoi(afMain);const afBothRoi=calcSubRoi(afBoth);
 
   // 단독 (기존 방식 유지)
   const sDayCount=done.filter(d=>(d.singleBets||[]).some(b=>b.betResult!=='cancel'&&b.betResult!=='pending')).length;
@@ -732,7 +752,9 @@ function renderAccuracy(){
 
   document.getElementById('acc-rate-bars').innerHTML=[
     {name:'🎯 만장일치',key:'unanimous',hit:uHit,total:uBets.length,rate:uRate,roi:uRoi,sub:`${uHit}회 적중 / 총 ${uBets.length}회`},
-    {name:'⚡ 도전경기',key:'allfive',hit:a5Hit,total:a5All.length,rate:a5Rate,roi:a5Roi,sub:`${a5Hit}회 적중 / 총 ${a5All.length}회`},
+    {name:'➖ 도전경기(-)',key:'af_minus',hit:afMinus.filter(b=>b.betResult==='hit').length,total:afMinus.length,rate:afMinus.length?Math.round(afMinus.filter(b=>b.betResult==='hit').length/afMinus.length*100):0,roi:afMinusRoi,sub:`${afMinus.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afMinus.length}회`},
+    {name:'⚡ 도전경기',key:'af_main',hit:afMain.filter(b=>b.betResult==='hit').length,total:afMain.length,rate:afMain.length?Math.round(afMain.filter(b=>b.betResult==='hit').length/afMain.length*100):0,roi:afMainRoi,sub:`${afMain.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afMain.length}회`},
+    {name:'↔️ 도전경기(양방)',key:'af_both',hit:afBoth.filter(b=>b.betResult==='hit').length,total:afBoth.length,rate:afBoth.length?Math.round(afBoth.filter(b=>b.betResult==='hit').length/afBoth.length*100):0,roi:afBothRoi,sub:`${afBoth.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afBoth.length}회`},
     {name:'1️⃣ 단독베팅',key:'single',hit:sHit,total:sAll.length,rate:sRate,roi:sRoi,sub:`${sHit}회 적중 / 총 ${sAll.length}회 (${sDayCount}일)`},
   ].map(r=>`<div class="rate-bar-wrap" onclick="showAccDetail('${r.key}')" style="cursor:pointer;">
     <div class="rate-bar-label">
