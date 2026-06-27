@@ -1293,21 +1293,37 @@ function renderBetting(){
   const sHtml=[...DATA.keys()].sort((a,b)=>DATA[b].date.localeCompare(DATA[a].date)).map(i=>{
     const d=DATA[i],bets=d.singleBets||[];
     if(!bets.length)return'';
-    return bets.map((item,bi)=>{
-      const rs=item.result===null?'pending':item.result==='취소'||item.result==='무승부'?'cancel':item.pick===item.result?'hit':'miss';
-      const profit=rs==='hit'?Math.round(item.amount*(item.odds-1)):null;
-      return`<div class="day-card" style="margin-bottom:10px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
-        <div class="bet-card-header-row1">
-          <span class="day-date">📅 ${d.date} <span style="font-size:10px;font-weight:700;color:var(--green);background:rgba(6,214,160,0.10);border-radius:6px;padding:2px 8px;">${item.matchup}</span></span>
-          <span class="day-badge ${rs}">${rs==='hit'?'✅ 적중':rs==='miss'?'❌ 미적중':rs==='cancel'?'취소':'⏳ 대기중'}</span>
+    const pending=bets.some(b=>b.betResult==='pending');
+    const hitCount=bets.filter(b=>b.betResult==='hit').length;
+    const doneCount=bets.filter(b=>b.betResult!=='pending'&&b.betResult!=='cancel').length;
+    const dayProfit=bets.reduce((s,b)=>s+(getProfit(b)||0),0);
+    const badgeColor=pending?'pending':hitCount===doneCount&&doneCount>0?'hit':hitCount===0&&doneCount>0?'miss':'hit';
+    const badgeText=pending?'⏳ 대기중':`${hitCount}/${doneCount} 적중`;
+    const profitColor=dayProfit>=0?'var(--green)':'var(--red)';
+    return`<div class="day-card" style="margin-bottom:14px"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;">
+      <div class="bet-card-header-row1">
+        <span class="day-date">📅 ${d.date}</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="day-badge ${badgeColor}">${badgeText}</span>
+          <button class="edit-btn" onclick="openEditModal('single',${i},0)">✏️ 전체수정</button>
         </div>
-        <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원 ${rs==='hit'?`/ <strong style="color:var(--green)">📈 +${profit.toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}</span></div>
-      </div><div class="day-body">
-        <div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
-        <div class="game-row"><span class="game-matchup">${item.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${item.pick}</span></span><span class="col-result-cell game-result ${rs}">${item.result||'대기'}</span></div>
-        ${rs!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${rs==='pending'?'neu':'neg'}" style="font-weight:900;font-size:13px">${rs==='pending'?'-':fmt(-item.amount)}</span></div>`:''}
-      </div></div>`;
-    }).join('');
+      </div>
+      <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${bets.length}경기 / 베팅 ${(bets.length*100).toLocaleString()}원${!pending?` / <strong style="color:${profitColor}">${fmt(dayProfit)}</strong>`:`/ <span style="color:#6b9fce">예상 ${bets.reduce((s,b)=>s+Math.round(b.amount*b.odds),0).toLocaleString()}원</span>`}</span></div>
+    </div><div class="day-body">
+      <div class="game-list-header"><span class="col-match">매치업 / 픽</span><span class="col-pick">배당</span><span class="col-result">결과</span></div>
+      ${bets.map((b,bi)=>{
+        const rs=b.result===null?'pending':b.result==='취소'?'cancel':b.pick===b.result?'hit':'miss';
+        const st=b.betResult!=='pending'?b.betResult:rs;
+        const profit=st==='hit'?Math.round(b.amount*(b.odds-1)):st==='cancel'?0:-b.amount;
+        return`<div class="game-row" style="position:relative;">
+          <span class="game-matchup">${b.matchup} <span class="pick-chip">${b.pick}</span></span>
+          <span class="col-pick-cell" style="color:var(--gold2);font-weight:700;">${b.odds}배</span>
+          <span class="col-result-cell game-result ${rs}">${b.result||'대기'}</span>
+          <button class="edit-btn" onclick="openEditModal('single',${i},${bi})" style="font-size:12px;">✏️</button>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:2px 20px 6px;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="color:var(--gray);">베팅 ${st==='cancel'?'0(환불)':b.amount.toLocaleString()}원</span><span class="${st==='hit'?'pos':st==='cancel'?'neu':'neg'}" style="font-weight:700;">${st==='cancel'?'취소(환불)':fmt(profit)}</span></div>`;
+      }).join('')}
+    </div></div>`;
   }).join('');
 
   document.getElementById('single-list').innerHTML=sHtml||'<div class="empty">📝 단독베팅 내역이 없습니다.</div>';
