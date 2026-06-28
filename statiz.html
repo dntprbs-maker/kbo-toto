@@ -605,7 +605,7 @@ function showAccDetail(type){
   const titleMap={unanimous:'🎯 만장일치 날짜별 기록',allfive:'⚡ 도전경기 날짜별 기록',single:'1️⃣ 단독베팅 날짜별 기록',all:'📋 전체 날짜별 기록'};
   document.getElementById('acc-detail-title').textContent=titleMap[type]||'날짜별 기록';
 
-  const done=DATA.filter(d=>d.unanimousBet.betResult!=='pending');
+  const done=DATA.filter(d=>d.allFiveBets&&d.allFiveBets.some(b=>b.betResult!=='pending'));
 
   // 행 데이터 수집
   let rows=[];
@@ -692,12 +692,12 @@ function showAccDetail(type){
 
 // ── 1. 적중률/수익률 ──
 function renderAccuracy(){
-  const done=DATA.filter(d=>d.unanimousBet.betResult!=='pending');
+  const done=DATA.filter(d=>d.allFiveBets&&d.allFiveBets.some(b=>b.betResult!=='pending'));
 
-  // 만장일치
-  const uBets=done.map(d=>d.unanimousBet).filter(b=>b.betResult!=='cancel');
-  const uHit=uBets.filter(b=>b.betResult==='hit').length;
-  const uRate=uBets.length?Math.round(uHit/uBets.length*100):0;
+  // 만장일치 (statiz는 unanimousBet:null)
+  const uBets=[];
+  const uHit=0;
+  const uRate=0;
 
   // 도전경기(5경기)
   const a5All=done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.betResult!=='cancel'&&b.betResult!=='pending'));
@@ -778,10 +778,10 @@ function renderAccuracy(){
 
 // ── 2. 수익 관련 ──
 function renderProfit(){
-  const done=DATA.filter(d=>d.unanimousBet.betResult!=='pending');
+  const done=DATA.filter(d=>d.allFiveBets&&d.allFiveBets.some(b=>b.betResult!=='pending'));
   const allBets=done.flatMap(d=>{
     const bets=[];
-    if(d.unanimousBet.betResult!=='cancel')bets.push(d.unanimousBet);
+    if(d.unanimousBet&&d.unanimousBet.betResult!=='cancel')bets.push(d.unanimousBet);
     (d.allFiveBets||[]).filter(b=>b.betResult!=='cancel').forEach(b=>bets.push(b));
     (d.singleBets||[]).filter(b=>b.betResult!=='cancel').forEach(b=>bets.push(b));
     return bets;
@@ -826,7 +826,7 @@ function renderChart(){
   ctx.scale(devicePixelRatio,devicePixelRatio);
   const W=canvas.offsetWidth,H=160;
   ctx.clearRect(0,0,W,H);
-  const done=DATA.filter(d=>d.unanimousBet.betResult!=='pending');
+  const done=DATA.filter(d=>d.allFiveBets&&d.allFiveBets.some(b=>b.betResult!=='pending'));
   if(!done.length){ctx.fillStyle='#6b7280';ctx.font='13px sans-serif';ctx.textAlign='center';ctx.fillText('데이터 없음',W/2,H/2);return;}
   let cum=0;const pts=[];
   done.forEach(d=>{
@@ -856,7 +856,7 @@ function renderChart(){
 
 // ── 3. 패턴 분석 ──
 function renderPattern(){
-  const done=DATA.filter(d=>d.unanimousBet.betResult!=='pending');
+  const done=DATA.filter(d=>d.allFiveBets&&d.allFiveBets.some(b=>b.betResult!=='pending'));
   const dayNames=['일','월','화','수','목','금','토'];
   const dayMap={};
   done.forEach(d=>{
@@ -933,12 +933,12 @@ function renderToday(){
   const uBet=todayData.unanimousBet;
   const a5Bets=todayData.allFiveBets||[];
   const sBets=todayData.singleBets||[];
-  const totalBet=uBet.amount+(a5Bets.reduce((s,b)=>s+b.amount,0))+(sBets.reduce((s,b)=>s+b.amount,0));
+  const totalBet=(uBet?uBet.amount:0)+(a5Bets.reduce((s,b)=>s+b.amount,0))+(sBets.reduce((s,b)=>s+b.amount,0));
 
   let html=`<div class="today-bet-summary">
     <div class="today-bet-title">💰 오늘 베팅 현황 (${todayData.date})</div>
     <div class="today-bet-row"><span class="today-bet-label">총 베팅금액</span><span class="today-bet-val">${totalBet.toLocaleString()}원</span></div>
-    <div class="today-bet-row"><span class="today-bet-label">만장일치</span><span class="today-bet-val">${uBet.amount.toLocaleString()}원 / 배당 ${uBet.odds}배 → 예상 ${Math.round(uBet.amount*uBet.odds).toLocaleString()}원</span></div>
+    <div class="today-bet-row"><span class="today-bet-label">만장일치</span><span class="today-bet-val">${uBet?`${uBet.amount.toLocaleString()}원 / 배당 ${uBet.odds}배 → 예상 ${Math.round(uBet.amount*uBet.odds).toLocaleString()}원`:'해당없음'}</span></div>
     ${a5Bets.map(b=>`<div class="today-bet-row"><span class="today-bet-label">⚡ ${b.label}</span><span class="today-bet-val">${b.amount.toLocaleString()}원 / ${b.odds}배 → ${Math.round(b.amount*b.odds).toLocaleString()}원</span></div>`).join('')}
     ${sBets.length?`<div class="today-bet-row"><span class="today-bet-label">1️⃣ 단독(각)</span><span class="today-bet-val">${sBets[0].amount.toLocaleString()}원 × ${sBets.length}경기</span></div>`:''}
   </div>`;
