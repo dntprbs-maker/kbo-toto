@@ -151,6 +151,7 @@ canvas{width:100%!important;}
 .conf-chip.tier-mid{background:rgba(245,209,102,0.15);color:var(--gold2);}
 .conf-chip.tier-low{background:rgba(239,71,111,0.15);color:var(--red);}
 .conf-chip .conf-pct{font-size:8.5px;font-weight:700;opacity:0.85;}
+.conf-chip.pick-final{border:1px solid currentColor;font-size:12px;}
 .unani-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-left:3px;vertical-align:middle;}
 .td-result-hit{color:var(--green);font-weight:900;}
 .td-result-miss{color:var(--red);font-weight:900;}
@@ -1335,6 +1336,20 @@ function aiChip(pick,conf){
   const tier=conf>=65?'tier-high':conf>=55?'tier-mid':'tier-low';
   return `<span class="conf-chip ${tier}">${pick}<span class="conf-pct">${conf}%</span></span>`;
 }
+function pickConf(g){
+  const vals=[];
+  if(g.ai1===g.pick&&g.ai1conf!=null)vals.push(g.ai1conf);
+  if(g.ai2===g.pick&&g.ai2conf!=null)vals.push(g.ai2conf);
+  if(g.ai3===g.pick&&g.ai3conf!=null)vals.push(g.ai3conf);
+  if(!vals.length)return null;
+  return Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*10)/10;
+}
+function pickChip(g){
+  const conf=pickConf(g);
+  if(conf===null)return g.pick;
+  const tier=conf>=65?'tier-high':conf>=55?'tier-mid':'tier-low';
+  return `<span class="conf-chip pick-final ${tier}">${g.pick}<span class="conf-pct">${conf}%</span></span>`;
+}
 function renderRecords(){
   const el=document.getElementById('records-list');
   const days=[...DATA].sort((a,b)=>b.date.localeCompare(a.date));
@@ -1344,7 +1359,7 @@ function renderRecords(){
     const rows=d.games.map(g=>{
       const unani=isUnanimous(g);
       const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.pick===g.result?'hit':'miss';
-      return`<tr><td class="col-match">${g.matchup}${unani?'<span class="unani-dot"></span>':''}</td><td class="col-ai1">${aiChip(g.ai1,g.ai1conf)}</td><td class="col-ai2">${aiChip(g.ai2,g.ai2conf)}</td><td class="col-ai3">${aiChip(g.ai3,g.ai3conf)}</td><td class="col-pick">${g.pick}</td><td class="col-result td-result-${rs}">${g.result||'대기'}</td></tr>`;
+      return`<tr><td class="col-match">${g.matchup}${unani?'<span class="unani-dot"></span>':''}</td><td class="col-ai1">${aiChip(g.ai1,g.ai1conf)}</td><td class="col-ai2">${aiChip(g.ai2,g.ai2conf)}</td><td class="col-ai3">${aiChip(g.ai3,g.ai3conf)}</td><td class="col-pick">${pickChip(g)}</td><td class="col-result td-result-${rs}">${g.result||'대기'}</td></tr>`;
     }).join('');
     return`<div class="day-card"><div class="day-header">
         <span class="day-date">📅 ${d.date}</span>
