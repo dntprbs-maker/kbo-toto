@@ -146,6 +146,11 @@ canvas{width:100%!important;}
 .games-table td.col-pick{color:var(--gold);font-weight:700;padding-left:12px;border-right:1px solid var(--border);}
 .games-table tr:last-child td{border-bottom:none;}
 .games-table tr:nth-child(even) td{filter:brightness(1.04);}
+.conf-chip{display:inline-flex;flex-direction:column;align-items:center;padding:3px 6px;border-radius:8px;font-size:11px;font-weight:900;line-height:1.3;}
+.conf-chip.tier-high{background:rgba(6,214,160,0.15);color:var(--green);}
+.conf-chip.tier-mid{background:rgba(245,209,102,0.15);color:var(--gold2);}
+.conf-chip.tier-low{background:rgba(239,71,111,0.15);color:var(--red);}
+.conf-chip .conf-pct{font-size:8.5px;font-weight:700;opacity:0.85;}
 .unani-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-left:3px;vertical-align:middle;}
 .td-result-hit{color:var(--green);font-weight:900;}
 .td-result-miss{color:var(--red);font-weight:900;}
@@ -516,11 +521,11 @@ const DATA=[
     {matchup:"LG vs 키움",pick:"LG",odds:1.38,amount:100,betResult:"miss",result:"키움"},
   ]},
   {date:"2026-07-01",games:[
-    {matchup:"롯데 vs 두산",ai1:"두산",ai2:"두산",ai3:"롯데",pick:"두산",result:null},
-    {matchup:"SSG vs KIA",ai1:"KIA",ai2:"KIA",ai3:"KIA",pick:"KIA",result:null},
-    {matchup:"삼성 vs NC",ai1:"삼성",ai2:"NC",ai3:"삼성",pick:"삼성",result:null},
-    {matchup:"KT vs 한화",ai1:"KT",ai2:"KT",ai3:"한화",pick:"KT",result:null},
-    {matchup:"LG vs 키움",ai1:"키움",ai2:"키움",ai3:"LG",pick:"키움",result:null},
+    {matchup:"롯데 vs 두산",ai1:"두산",ai1conf:65,ai2:"두산",ai2conf:55,ai3:"롯데",ai3conf:52,pick:"두산",result:null},
+    {matchup:"SSG vs KIA",ai1:"KIA",ai1conf:78,ai2:"KIA",ai2conf:62,ai3:"KIA",ai3conf:62,pick:"KIA",result:null},
+    {matchup:"삼성 vs NC",ai1:"삼성",ai1conf:70,ai2:"NC",ai2conf:53,ai3:"삼성",ai3conf:58,pick:"삼성",result:null},
+    {matchup:"KT vs 한화",ai1:"KT",ai1conf:55,ai2:"KT",ai2conf:65,ai3:"한화",ai3conf:56,pick:"KT",result:null},
+    {matchup:"LG vs 키움",ai1:"키움",ai1conf:60,ai2:"키움",ai2conf:52,ai3:"LG",ai3conf:68,pick:"키움",result:null},
   ],
   unanimousBet:{odds:1.55,amount:100,betResult:"pending"},
   allFiveBets:[
@@ -1117,12 +1122,24 @@ function openEditModal(type, dayIdx, subIdx) {
           <input class="modal-input" id="edit-ai1-${gi}" value="${g.ai1||''}">
         </div>
         <div class="modal-field">
+          <span class="modal-label">반짝이 신뢰도%</span>
+          <input class="modal-input" id="edit-ai1conf-${gi}" type="number" value="${g.ai1conf!=null?g.ai1conf:''}">
+        </div>
+        <div class="modal-field">
           <span class="modal-label">별이</span>
           <input class="modal-input" id="edit-ai2-${gi}" value="${g.ai2||''}">
         </div>
         <div class="modal-field">
+          <span class="modal-label">별이 신뢰도%</span>
+          <input class="modal-input" id="edit-ai2conf-${gi}" type="number" value="${g.ai2conf!=null?g.ai2conf:''}">
+        </div>
+        <div class="modal-field">
           <span class="modal-label">초롱이</span>
           <input class="modal-input" id="edit-ai3-${gi}" value="${g.ai3||''}">
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">초롱이 신뢰도%</span>
+          <input class="modal-input" id="edit-ai3conf-${gi}" type="number" value="${g.ai3conf!=null?g.ai3conf:''}">
         </div>
         <div class="modal-field">
           <span class="modal-label">최종픽</span>
@@ -1261,6 +1278,9 @@ function saveModal() {
       g.ai1 = v(`edit-ai1-${gi}`) || g.ai1;
       g.ai2 = v(`edit-ai2-${gi}`) || g.ai2;
       g.ai3 = v(`edit-ai3-${gi}`) || g.ai3;
+      const c1 = v(`edit-ai1conf-${gi}`); g.ai1conf = c1 === '' || c1 === undefined ? undefined : parseFloat(c1);
+      const c2 = v(`edit-ai2conf-${gi}`); g.ai2conf = c2 === '' || c2 === undefined ? undefined : parseFloat(c2);
+      const c3 = v(`edit-ai3conf-${gi}`); g.ai3conf = c3 === '' || c3 === undefined ? undefined : parseFloat(c3);
       g.pick = v(`edit-pick-${gi}`) || g.pick;
       const r = v(`edit-result-${gi}`);
       g.result = r === '' ? null : r;
@@ -1310,6 +1330,11 @@ function saveModal() {
 }
 
 // ── 경기기록 렌더 ──
+function aiChip(pick,conf){
+  if(conf===undefined||conf===null)return pick;
+  const tier=conf>=65?'tier-high':conf>=55?'tier-mid':'tier-low';
+  return `<span class="conf-chip ${tier}">${pick}<span class="conf-pct">${conf}%</span></span>`;
+}
 function renderRecords(){
   const el=document.getElementById('records-list');
   const days=[...DATA].sort((a,b)=>b.date.localeCompare(a.date));
@@ -1319,7 +1344,7 @@ function renderRecords(){
     const rows=d.games.map(g=>{
       const unani=isUnanimous(g);
       const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.pick===g.result?'hit':'miss';
-      return`<tr><td class="col-match">${g.matchup}${unani?'<span class="unani-dot"></span>':''}</td><td class="col-ai1">${g.ai1}</td><td class="col-ai2">${g.ai2}</td><td class="col-ai3">${g.ai3}</td><td class="col-pick">${g.pick}</td><td class="col-result td-result-${rs}">${g.result||'대기'}</td></tr>`;
+      return`<tr><td class="col-match">${g.matchup}${unani?'<span class="unani-dot"></span>':''}</td><td class="col-ai1">${aiChip(g.ai1,g.ai1conf)}</td><td class="col-ai2">${aiChip(g.ai2,g.ai2conf)}</td><td class="col-ai3">${aiChip(g.ai3,g.ai3conf)}</td><td class="col-pick">${g.pick}</td><td class="col-result td-result-${rs}">${g.result||'대기'}</td></tr>`;
     }).join('');
     return`<div class="day-card"><div class="day-header">
         <span class="day-date">📅 ${d.date}</span>
