@@ -665,15 +665,15 @@ function renderDailyDetail(){
 
     // 베팅 상세
     const betRows=[
-      {label:'🎯 만장일치',b:d.unanimousBet},
-      ...(d.allFiveBets||[]).map((b,i)=>({label:`⚡ ${b.label||'도전'+i}`,b})),
-      ...(d.singleBets||[]).map(b=>({label:`1️⃣ ${b.matchup}`,b})),
-    ].filter(x=>x.b&&x.b.betResult!=='cancel').map(({label,b})=>{
+      {label:'🎯 만장일치',b:d.unanimousBet,conf:unanimousConf(d)},
+      ...(d.allFiveBets||[]).map((b,i)=>({label:`⚡ ${b.label||'도전'+i}`,b,conf:comboConf(b,d)})),
+      ...(d.singleBets||[]).map(b=>({label:`1️⃣ ${b.matchup}`,b,conf:singleConf(b,d)})),
+    ].filter(x=>x.b&&x.b.betResult!=='cancel').map(({label,b,conf})=>{
       const p=getProfit(b);
       const c=b.betResult==='hit'?'var(--green)':b.betResult==='miss'?'var(--red)':'var(--gray)';
       const icon=b.betResult==='hit'?'✅':b.betResult==='miss'?'❌':'⏳';
       return`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px;">
-        <span style="color:var(--gray);flex:1;">${label}</span>
+        <span style="color:var(--gray);flex:1;">${label}${betConfBadge(conf)}</span>
         <span style="color:var(--light);margin:0 8px;">${b.amount.toLocaleString()}원×${b.odds}배</span>
         <span style="color:${c};font-weight:700;min-width:60px;text-align:right;">${icon} ${p===null?'-':fmt(p)}</span>
       </div>`;
@@ -1370,6 +1370,36 @@ function pickChip(g){
   const tier=conf>=65?'tier-high':conf>=55?'tier-mid':'tier-low';
   return `<span class="conf-chip pick-final ${tier}">${g.pick}<span class="conf-pct">${conf}%</span></span>`;
 }
+// ── 배팅내역 신뢰도 계산 ──
+function unanimousConf(d){
+  if(!d.games)return null;
+  const vals=d.games.filter(isUnanimous).map(pickConf).filter(c=>c!=null);
+  if(!vals.length)return null;
+  return Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*10)/10;
+}
+function comboConf(b,d){
+  if(!d.games)return null;
+  let games=d.games;
+  if(b.label==='도전경기(-)')games=d.games.filter(g=>g.matchup!==b.excludedGame);
+  const vals=[];
+  games.forEach(g=>{
+    let c=pickConf(g);
+    if(b.label==='도전경기(양방)'&&g.matchup===b.bothGame&&c!=null)c=Math.round((100-c)*10)/10;
+    if(c!=null)vals.push(c);
+  });
+  if(!vals.length)return null;
+  return Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*10)/10;
+}
+function singleConf(b,d){
+  if(!d.games)return null;
+  const g=d.games.find(g=>g.matchup===b.matchup);
+  return g?pickConf(g):null;
+}
+function betConfBadge(conf){
+  if(conf==null)return'';
+  const c=conf>=65?'var(--green)':conf>=55?'var(--gold2)':'var(--red)';
+  return ` <span style="color:${c};font-weight:700;">(${conf}%)</span>`;
+}
 function renderRecords(){
   const el=document.getElementById('records-list');
   const days=[...DATA].sort((a,b)=>b.date.localeCompare(a.date));
@@ -1410,7 +1440,7 @@ function renderBetting(){
       </div>
       <div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">${games.length}경기 / 배당 <strong>${item.odds}배</strong> / 베팅 ${item.amount.toLocaleString()}원 ${status==='hit'?`/ <strong style="color:var(--green)">📈 +${Math.round(item.amount*(item.odds-1)).toLocaleString()}원</strong>`:`/ <span style="color:#6b9fce">예상 ${Math.round(item.amount*item.odds).toLocaleString()}원</span>`}</span></div>
       </div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>
-      ${games.map(g=>{const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell"><span class="pick-chip">${g.pick}</span></span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
+      ${games.map(g=>{const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':g.pick===g.result?'hit':'miss';return`<div class="game-row"><span class="game-matchup">${g.matchup}</span><span class="col-pick-cell">${pickChip(g)}</span><span class="col-result-cell game-result ${rs}">${g.result||'대기'}</span></div>`;}).join('')}
       ${status!=='hit'?`<div style="display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span class="${status==='pending'?'neu':status==='cancel'?'neu':'neg'}" style="font-weight:900;font-size:13px">${status==='pending'?'-':status==='cancel'?'0원 (환불)':fmt(-item.amount)}</span></div>`:''}
       </div></div>`;
   }).join('');
@@ -1443,8 +1473,10 @@ function renderBetting(){
         const rs=b.result===null?'pending':b.result==='취소'||b.result==='무승부'?'cancel':b.pick===b.result?'hit':'miss';
         const st=b.betResult!=='pending'?b.betResult:rs;
         const profit=st==='hit'?Math.round(b.amount*(b.odds-1)):st==='cancel'?0:-b.amount;
+        const g=(d.games||[]).find(gg=>gg.matchup===b.matchup);
+        const pickHtml=g?pickChip(g):`<span class="pick-chip">${b.pick}</span>`;
         return`<div class="game-row" style="position:relative;">
-          <span class="game-matchup">${b.matchup} <span class="pick-chip">${b.pick}</span></span>
+          <span class="game-matchup">${b.matchup} ${pickHtml}</span>
           <span class="col-pick-cell" style="color:var(--gold2);font-weight:700;">${b.odds}배</span>
           <span class="col-result-cell game-result ${rs}">${b.result||'대기'}</span>
           <button class="edit-btn" onclick="openEditModal('single',${i},${bi})" style="font-size:12px;">✏️</button>
@@ -1501,8 +1533,11 @@ function renderAllfiveList(){
       }
       if(isBoth){ chipLabel=bothPick; } else { chipLabel=pickLabels[pickIdx]||g.pick; }
       pickIdx++;
+      let conf=pickConf(g);
+      if(isBoth&&conf!=null)conf=Math.round((100-conf)*10)/10;
+      const confText=conf!=null?' <span style="font-size:9px;opacity:.75;">('+conf+'%)</span>':'';
       const cleanPick=chipLabel.replace(/[승패무]$/,'');const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':(g.result===cleanPick||g.result===chipLabel)?'hit':'miss';
-      return '<div class="game-row"><span class="game-matchup">'+g.matchup+'</span><span class="col-pick-cell"><span class="pick-chip" style="background:'+color+'22;color:'+color+';">'+chipLabel+'</span></span><span class="col-result-cell game-result '+rs+'">'+(g.result||'대기')+'</span></div>';
+      return '<div class="game-row"><span class="game-matchup">'+g.matchup+'</span><span class="col-pick-cell"><span class="pick-chip" style="background:'+color+'22;color:'+color+';">'+chipLabel+confText+'</span></span><span class="col-result-cell game-result '+rs+'">'+(g.result||'대기')+'</span></div>';
     }).join('');
     const profit=status==='hit'?Math.round(bet.amount*(bet.odds-1)):0;
     const profitHtml=status==='hit'?'/ <strong style="color:var(--green)">📈 +'+profit.toLocaleString()+'원</strong>':'/ <span style="color:#6b9fce">예상 '+Math.round(bet.amount*(bet.odds||0)).toLocaleString()+'원</span>';
