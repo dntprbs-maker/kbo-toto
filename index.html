@@ -1535,8 +1535,9 @@ function renderAllfiveList(){
       pickIdx++;
       let conf=pickConf(g);
       if(isBoth&&conf!=null)conf=Math.round((100-conf)*10)/10;
+      const tier=conf==null?null:conf>=65?'tier-high':conf>=55?'tier-mid':'tier-low';
       const pickChipHtml=conf!=null
-        ? '<span class="conf-chip" style="background:'+color+'22;color:'+color+';border:1px solid '+color+';">'+chipLabel+'<span class="conf-pct">'+conf+'%</span></span>'
+        ? '<span class="conf-chip '+tier+'">'+chipLabel+'<span class="conf-pct">'+conf+'%</span></span>'
         : '<span class="pick-chip" style="background:'+color+'22;color:'+color+';">'+chipLabel+'</span>';
       const cleanPick=chipLabel.replace(/[승패무]$/,'');const rs=g.result===null?'pending':g.result==='취소'||g.result==='무승부'?'cancel':(g.result===cleanPick||g.result===chipLabel)?'hit':'miss';
       return '<div class="game-row"><span class="game-matchup">'+g.matchup+'</span><span class="col-pick-cell">'+pickChipHtml+'</span><span class="col-result-cell game-result '+rs+'">'+(g.result||'대기')+'</span></div>';
