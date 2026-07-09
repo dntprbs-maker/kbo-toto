@@ -235,7 +235,6 @@ canvas{width:100%!important;}
     <div class="tab" onclick="showTab('records')">📋 경기기록</div>
     <div class="tab" onclick="showTab('betting')">🎯 베팅내역</div>
     <a href="statiz.html" class="tab" style="text-decoration:none;">📊 스탯티즈</a>
-    <div class="tab" onclick="openScoreModal()" style="font-size:11px;opacity:0.75;flex:0 0 auto;padding-left:10px;padding-right:10px;">🔢 스코어</div>
   </div>
   <div id="bet-filter-sticky" style="display:none;padding:6px 12px 4px;background:var(--bg2);border-left:1px solid var(--border);border-right:1px solid var(--border);">
     <div style="display:flex;gap:8px;">
@@ -258,11 +257,11 @@ canvas{width:100%!important;}
         <div class="dash-menu-title">적중률 / 수익률</div>
         <div class="dash-menu-desc">베팅 유형별 적중률<br>AI 3인 예측 성적</div>
       </div>
-      <div class="dash-menu-card c2" onclick="showDetail('profit')">
+      <div class="dash-menu-card c2" onclick="openScoreModal()">
         <div class="dash-menu-badge">2순위</div>
-        <div class="dash-menu-icon">💰</div>
-        <div class="dash-menu-title">수익 관련</div>
-        <div class="dash-menu-desc">총 투자 / 수익<br>누적 손익 그래프</div>
+        <div class="dash-menu-icon">🔢</div>
+        <div class="dash-menu-title">스코어</div>
+        <div class="dash-menu-desc">경기 실제 스코어 기록<br>날짜별 결과 확인</div>
       </div>
       <div class="dash-menu-card c3" onclick="showDetail('pattern')">
         <div class="dash-menu-badge">3순위</div>
