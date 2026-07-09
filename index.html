@@ -235,6 +235,7 @@ canvas{width:100%!important;}
     <div class="tab" onclick="showTab('records')">📋 경기기록</div>
     <div class="tab" onclick="showTab('betting')">🎯 베팅내역</div>
     <a href="statiz.html" class="tab" style="text-decoration:none;">📊 스탯티즈</a>
+    <div class="tab" onclick="openScoreModal()" style="font-size:11px;opacity:0.75;flex:0 0 auto;padding-left:10px;padding-right:10px;">🔢 스코어</div>
   </div>
   <div id="bet-filter-sticky" style="display:none;padding:6px 12px 4px;background:var(--bg2);border-left:1px solid var(--border);border-right:1px solid var(--border);">
     <div style="display:flex;gap:8px;">
@@ -356,6 +357,15 @@ canvas{width:100%!important;}
   </div>
 </div>
 <!-- 편집 모달 -->
+<div class="modal-overlay" id="score-modal">
+  <div class="modal-box">
+    <div class="modal-title">
+      <span>🔢 경기 스코어 기록</span>
+      <button class="modal-close" onclick="closeScoreModal()">✕</button>
+    </div>
+    <div id="score-modal-body" style="font-size:12px;color:var(--light);max-height:60vh;overflow-y:auto;">불러오는 중...</div>
+  </div>
+</div>
 <div class="modal-overlay" id="edit-modal">
   <div class="modal-box">
     <div class="modal-title">
@@ -1671,6 +1681,31 @@ function renderAllfiveList(){
     return '<div class="day-card" style="margin-bottom:14px;border-left:3px solid '+color+'"><div class="day-header" style="flex-direction:column;align-items:stretch;gap:4px;"><div class="bet-card-header-row1"><span class="day-date">📅 '+d.date+' <span style="font-size:10px;font-weight:700;color:'+color+';background:'+color+'22;border-radius:6px;padding:2px 8px;">'+currentAfTab+'</span></span><div style="display:flex;align-items:center;gap:8px;"><span class="day-badge '+status+'">'+badgeHtml+'</span><button class="edit-btn" onclick="openEditModal(\'allfive\','+i+',0)">✏️</button></div></div><div class="bet-card-summary-row"><span class="bet-header-summary" style="margin-left:0;">'+pickLabels.length+'경기 / 배당 <strong>'+(bet.odds||'미정')+'배</strong> / 베팅 '+bet.amount.toLocaleString()+'원 '+profitHtml+'</span></div></div><div class="day-body"><div class="game-list-header"><span class="col-match">매치업</span><span class="col-pick">최종픽</span><span class="col-result">결과</span></div>'+gameRows+bothNote+lossHtml+'</div></div>';
   }).join('');
   document.getElementById('allfive-list').innerHTML=html||'<div class="empty">📝 도전경기 베팅 내역이 없습니다.</div>';
+}
+
+function closeScoreModal(){document.getElementById('score-modal').classList.remove('active');}
+
+function openScoreModal(){
+  const modal=document.getElementById('score-modal');
+  const body=document.getElementById('score-modal-body');
+  modal.classList.add('active');
+  body.innerHTML='불러오는 중...';
+  fetch('https://raw.githubusercontent.com/dntprbs-maker/kbo-toto/main/scores.json?t='+Date.now())
+    .then(r=>r.json())
+    .then(data=>{
+      const records=(data.records||[]).slice().sort((a,b)=>b.date<a.date?-1:1);
+      if(!records.length){
+        body.innerHTML='<div style="color:var(--gray);padding:20px 0;text-align:center;">아직 기록된 스코어가 없습니다.</div>';
+        return;
+      }
+      body.innerHTML=records.map(d=>{
+        const rows=(d.scores||[]).map(s=>'<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span>'+s.matchup+'</span><span style="font-weight:700;color:var(--gold);">'+s.score+'</span></div>').join('');
+        return '<div style="margin-bottom:14px;"><div style="font-weight:900;color:var(--gold);margin-bottom:6px;">📅 '+d.date+'</div>'+(rows||'<div style="color:var(--gray);font-size:11px;">기록 없음</div>')+'</div>';
+      }).join('');
+    })
+    .catch(err=>{
+      body.innerHTML='<div style="color:var(--red);padding:20px 0;text-align:center;">불러오기 실패 😢<br>'+err.message+'</div>';
+    });
 }
 
 function showTab(id){
