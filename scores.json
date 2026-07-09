@@ -1,6 +1,23 @@
 {
-  "_note": "경기 스코어 별도 기록 파일. index.html/statiz.html의 DATA 구조와 별개로 관리됨. 날짜별로 matchup:score 형태로 기록.",
-  "_format": "예: {\"date\":\"2026-07-09\",\"scores\":[{\"matchup\":\"SSG vs 두산\",\"score\":\"3-5\"}, ...]}",
+  "_note": "경기 스코어 + 배당 기록 파일. index.html/statiz.html의 DATA 구조와 별개로 관리됨. odds.html이 이 파일을 자동으로 불러와서 배당률표를 렌더링함.",
+  "_format": "{\"date\":\"2026-07-09\",\"scores\":[{\"matchup\":\"SSG vs 두산\",\"score\":\"0-7\"}],\"odds\":[{\"home\":\"두산\",\"ho\":1.53,\"away\":\"SSG\",\"ao\":2.07,\"winner\":\"두산\"}]}",
   "records": [
+    {
+      "date": "2026-07-09",
+      "scores": [
+        {"matchup": "SSG vs 두산", "score": "0-7"},
+        {"matchup": "LG vs 삼성", "score": "5-6"},
+        {"matchup": "KIA vs 롯데", "score": "5-2"},
+        {"matchup": "키움 vs KT", "score": "취소"},
+        {"matchup": "NC vs 한화", "score": "4-6"}
+      ],
+      "odds": [
+        {"home": "두산", "ho": 1.53, "away": "SSG", "ao": 2.07, "winner": "두산"},
+        {"home": "삼성", "ho": 1.91, "away": "LG", "ao": 1.63, "winner": "삼성"},
+        {"home": "롯데", "ho": 1.84, "away": "KIA", "ao": 1.69, "winner": "KIA"},
+        {"home": "KT", "ho": 1.51, "away": "키움", "ao": 2.11, "winner": "취소"},
+        {"home": "한화", "ho": 1.77, "away": "NC", "ao": 1.75, "winner": "한화"}
+      ]
+    }
   ]
 }
