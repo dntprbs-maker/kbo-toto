@@ -698,7 +698,7 @@ function isUnanimous(g){return g.ai1===g.ai2&&g.ai2===g.ai3;}
 function getUnanimousGames(day){return day.games.filter(g=>isUnanimous(g));}
 function calcBetStatus(games,item){
   if(item.betResult==='hit'||item.betResult==='miss'||item.betResult==='cancel')return item.betResult;
-  const ag=games.filter(g=>g.result!=='취소');
+  const ag=games.filter(g=>g.result!=='취소'&&g.result!=='무승부');
   if(ag.some(g=>g.result===null))return'pending';
   if(ag.length===0)return'cancel';
   return ag.every(g=>g.pick===g.result)?'hit':'miss';
@@ -1026,7 +1026,7 @@ function renderAccuracy(){
   </div>`).join('');
 
   // AI 적중률
-  const doneGames=done.flatMap(d=>d.games.filter(g=>g.result&&g.result!=='취소'));
+  const doneGames=done.flatMap(d=>d.games.filter(g=>g.result&&g.result!=='취소'&&g.result!=='무승부'));
   function aiRate(key){
     const t=doneGames.filter(g=>g[key]);
     const h=t.filter(g=>g[key]===g.result);
@@ -1142,7 +1142,7 @@ function renderPattern(){
   done.forEach(d=>{
     const day=new Date(d.date).getDay();
     if(!dayMap[day])dayMap[day]={hit:0,total:0};
-    const games=d.games.filter(g=>g.result&&g.result!=='취소');
+    const games=d.games.filter(g=>g.result&&g.result!=='취소'&&g.result!=='무승부');
     games.forEach(g=>{dayMap[day].total++;if(g.pick===g.result)dayMap[day].hit++;});
   });
   const dayBars=Object.entries(dayMap).map(([d,v])=>({
@@ -1163,7 +1163,7 @@ function renderPattern(){
   // 팀별 픽 성공률
   const teamMap={};
   done.forEach(d=>{
-    d.games.filter(g=>g.result&&g.result!=='취소').forEach(g=>{
+    d.games.filter(g=>g.result&&g.result!=='취소'&&g.result!=='무승부').forEach(g=>{
       if(!teamMap[g.pick])teamMap[g.pick]={hit:0,total:0};
       teamMap[g.pick].total++;
       if(g.pick===g.result)teamMap[g.pick].hit++;
@@ -1193,7 +1193,7 @@ function renderPattern(){
 
   // 연속 기록
   const results=done.map(d=>{
-    const games=d.games.filter(g=>g.result&&g.result!=='취소');
+    const games=d.games.filter(g=>g.result&&g.result!=='취소'&&g.result!=='무승부');
     const hit=games.filter(g=>g.pick===g.result).length;
     const total=games.length;
     return total>0?hit/total>=0.6:'skip';
