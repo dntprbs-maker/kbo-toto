@@ -5,18 +5,125 @@
     {
       "date": "2026-07-09",
       "scores": [
-        {"matchup": "SSG vs 두산", "score": "0-7"},
-        {"matchup": "LG vs 삼성", "score": "5-6"},
-        {"matchup": "KIA vs 롯데", "score": "5-2"},
-        {"matchup": "키움 vs KT", "score": "취소"},
-        {"matchup": "NC vs 한화", "score": "4-6"}
+        {
+          "matchup": "SSG vs 두산",
+          "score": "0-7"
+        },
+        {
+          "matchup": "LG vs 삼성",
+          "score": "5-6"
+        },
+        {
+          "matchup": "KIA vs 롯데",
+          "score": "5-2"
+        },
+        {
+          "matchup": "키움 vs KT",
+          "score": "취소"
+        },
+        {
+          "matchup": "NC vs 한화",
+          "score": "4-6"
+        }
       ],
       "odds": [
-        {"home": "두산", "ho": 1.53, "away": "SSG", "ao": 2.07, "winner": "두산"},
-        {"home": "삼성", "ho": 1.91, "away": "LG", "ao": 1.63, "winner": "삼성"},
-        {"home": "롯데", "ho": 1.84, "away": "KIA", "ao": 1.69, "winner": "KIA"},
-        {"home": "KT", "ho": 1.51, "away": "키움", "ao": 2.11, "winner": "취소"},
-        {"home": "한화", "ho": 1.77, "away": "NC", "ao": 1.75, "winner": "한화"}
+        {
+          "home": "두산",
+          "ho": 1.53,
+          "away": "SSG",
+          "ao": 2.07,
+          "winner": "두산"
+        },
+        {
+          "home": "삼성",
+          "ho": 1.91,
+          "away": "LG",
+          "ao": 1.63,
+          "winner": "삼성"
+        },
+        {
+          "home": "롯데",
+          "ho": 1.84,
+          "away": "KIA",
+          "ao": 1.69,
+          "winner": "KIA"
+        },
+        {
+          "home": "KT",
+          "ho": 1.51,
+          "away": "키움",
+          "ao": 2.11,
+          "winner": "취소"
+        },
+        {
+          "home": "한화",
+          "ho": 1.77,
+          "away": "NC",
+          "ao": 1.75,
+          "winner": "한화"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-16",
+      "scores": [
+        {
+          "matchup": "KT vs LG",
+          "score": "4-3"
+        },
+        {
+          "matchup": "롯데 vs 삼성",
+          "score": "1-4"
+        },
+        {
+          "matchup": "KIA vs SSG",
+          "score": "0-6"
+        },
+        {
+          "matchup": "두산 vs NC",
+          "score": "2-4"
+        },
+        {
+          "matchup": "키움 vs 한화",
+          "score": "14-5"
+        }
+      ],
+      "odds": [
+        {
+          "home": "LG",
+          "ho": 1.57,
+          "away": "KT",
+          "ao": 2.0,
+          "winner": "KT"
+        },
+        {
+          "home": "삼성",
+          "ho": 1.47,
+          "away": "롯데",
+          "ao": 2.19,
+          "winner": "삼성"
+        },
+        {
+          "home": "SSG",
+          "ho": 2.34,
+          "away": "KIA",
+          "ao": 1.41,
+          "winner": "SSG"
+        },
+        {
+          "home": "NC",
+          "ho": 1.78,
+          "away": "두산",
+          "ao": 1.74,
+          "winner": "NC"
+        },
+        {
+          "home": "한화",
+          "ho": 1.36,
+          "away": "키움",
+          "ao": 2.49,
+          "winner": "키움"
+        }
       ]
     }
   ]
