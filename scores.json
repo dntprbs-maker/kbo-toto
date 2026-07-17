@@ -125,6 +125,68 @@
           "winner": "키움"
         }
       ]
+    },
+    {
+      "date": "2026-07-17",
+      "scores": [
+        {
+          "matchup": "KT vs LG",
+          "score": "6-1"
+        },
+        {
+          "matchup": "롯데 vs 삼성",
+          "score": "취소"
+        },
+        {
+          "matchup": "KIA vs SSG",
+          "score": "6-3"
+        },
+        {
+          "matchup": "두산 vs NC",
+          "score": "4-2"
+        },
+        {
+          "matchup": "키움 vs 한화",
+          "score": "7-6"
+        }
+      ],
+      "odds": [
+        {
+          "home": "LG",
+          "ho": 1.55,
+          "away": "KT",
+          "ao": 2.04,
+          "winner": "KT"
+        },
+        {
+          "home": "삼성",
+          "ho": 1.39,
+          "away": "롯데",
+          "ao": 2.4,
+          "winner": "취소"
+        },
+        {
+          "home": "SSG",
+          "ho": 1.86,
+          "away": "KIA",
+          "ao": 1.67,
+          "winner": "KIA"
+        },
+        {
+          "home": "NC",
+          "ho": 1.8,
+          "away": "두산",
+          "ao": 1.72,
+          "winner": "두산"
+        },
+        {
+          "home": "한화",
+          "ho": 1.37,
+          "away": "키움",
+          "ao": 2.46,
+          "winner": "키움"
+        }
+      ]
     }
   ]
 }
