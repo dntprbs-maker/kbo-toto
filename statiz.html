@@ -682,21 +682,21 @@ const DATA=[
     {matchup:"키움 vs 삼성",pick:"삼성",odds:1.35,amount:100,betResult:"hit",result:"삼성"},
   ]},
   {date:"2026-07-23",games:[
-    {matchup:"LG vs NC",ai1:"NC",ai2:"NC",ai3:"NC",pick:"NC",result:null},
-    {matchup:"롯데 vs SSG",ai1:"롯데",ai2:"롯데",ai3:"롯데",pick:"롯데",result:null},
-    {matchup:"KIA vs 한화",ai1:"KIA",ai2:"KIA",ai3:"KIA",pick:"KIA",result:null},
-    {matchup:"KT vs 두산",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT",result:null},
-    {matchup:"키움 vs 삼성",ai1:"삼성",ai2:"삼성",ai3:"삼성",pick:"삼성",result:null},
+    {matchup:"LG vs NC",ai1:"NC",ai2:"NC",ai3:"NC",pick:"NC",result:"NC"},
+    {matchup:"롯데 vs SSG",ai1:"롯데",ai2:"롯데",ai3:"롯데",pick:"롯데",result:"SSG"},
+    {matchup:"KIA vs 한화",ai1:"KIA",ai2:"KIA",ai3:"KIA",pick:"KIA",result:"한화"},
+    {matchup:"KT vs 두산",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT",result:"우천취소"},
+    {matchup:"키움 vs 삼성",ai1:"삼성",ai2:"삼성",ai3:"삼성",pick:"삼성",result:"삼성"},
   ],unanimousBet:null,
   allFiveBets:[
-    {label:"도전경기",odds:17.7,amount:100,betResult:"pending",pickLabels:["NC","롯데","KIA","KT","삼성"]},
+    {label:"도전경기",odds:9.9,amount:100,betResult:"miss",pickLabels:["NC","롯데","KIA","삼성"],note:"KTvs두산 우천취소, 나머지 4경기로 배당 재계산"},
   ],
   singleBets:[
-    {matchup:"LG vs NC",pick:"NC",odds:2.37,amount:100,betResult:"pending",result:null},
-    {matchup:"롯데 vs SSG",pick:"롯데",odds:1.58,amount:100,betResult:"pending",result:null},
-    {matchup:"KIA vs 한화",pick:"KIA",odds:1.87,amount:100,betResult:"pending",result:null},
-    {matchup:"KT vs 두산",pick:"KT",odds:1.79,amount:100,betResult:"pending",result:null},
-    {matchup:"키움 vs 삼성",pick:"삼성",odds:1.41,amount:100,betResult:"pending",result:null},
+    {matchup:"LG vs NC",pick:"NC",odds:2.37,amount:100,betResult:"hit",result:"NC"},
+    {matchup:"롯데 vs SSG",pick:"롯데",odds:1.58,amount:100,betResult:"miss",result:"SSG"},
+    {matchup:"KIA vs 한화",pick:"KIA",odds:1.87,amount:100,betResult:"miss",result:"한화"},
+    {matchup:"KT vs 두산",pick:"KT",odds:1.79,amount:100,betResult:"cancel",result:"우천취소"},
+    {matchup:"키움 vs 삼성",pick:"삼성",odds:1.41,amount:100,betResult:"hit",result:"삼성"},
   ]},
 ];
 
