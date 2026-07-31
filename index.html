@@ -984,27 +984,27 @@ const DATA=[
     {matchup:"롯데 vs 한화",pick:"롯데",odds:1.96,amount:100,betResult:"miss",result:"한화"},
   ]},
   {date:"2026-07-31",games:[
-    {matchup:"한화 vs KT",ai1:"한화",ai1conf:65.0,ai2:"KT",ai2conf:53.0,ai3:"한화",ai3conf:64.0,pick:"한화",result:null},
-    {matchup:"KIA vs NC",ai1:"KIA",ai1conf:70.0,ai2:"KIA",ai2conf:58.0,ai3:"NC",ai3conf:58.0,pick:"KIA",result:null},
-    {matchup:"LG vs 두산",ai1:"두산",ai1conf:60.0,ai2:"두산",ai2conf:55.0,ai3:"두산",ai3conf:56.0,pick:"두산",result:null},
-    {matchup:"SSG vs 키움",ai1:"SSG",ai1conf:65.0,ai2:"키움",ai2conf:54.0,ai3:"SSG",ai3conf:69.0,pick:"SSG",result:null},
-    {matchup:"삼성 vs 롯데",ai1:"삼성",ai1conf:75.0,ai2:"삼성",ai2conf:58.0,ai3:"삼성",ai3conf:60.0,pick:"삼성",result:null},
+    {matchup:"한화 vs KT",ai1:"한화",ai1conf:65.0,ai2:"KT",ai2conf:53.0,ai3:"한화",ai3conf:64.0,pick:"한화",result:"KT"},
+    {matchup:"KIA vs NC",ai1:"KIA",ai1conf:70.0,ai2:"KIA",ai2conf:58.0,ai3:"NC",ai3conf:58.0,pick:"KIA",result:"NC"},
+    {matchup:"LG vs 두산",ai1:"두산",ai1conf:60.0,ai2:"두산",ai2conf:55.0,ai3:"두산",ai3conf:56.0,pick:"두산",result:"두산"},
+    {matchup:"SSG vs 키움",ai1:"SSG",ai1conf:65.0,ai2:"키움",ai2conf:54.0,ai3:"SSG",ai3conf:69.0,pick:"SSG",result:"키움"},
+    {matchup:"삼성 vs 롯데",ai1:"삼성",ai1conf:75.0,ai2:"삼성",ai2conf:58.0,ai3:"삼성",ai3conf:60.0,pick:"삼성",result:"삼성"},
   ],
-  unanimousBet:{odds:2.4,amount:100,betResult:"pending",customGames:[
-    {matchup:"LG vs 두산",pick:"두산",result:null},
-    {matchup:"삼성 vs 롯데",pick:"삼성",result:null},
+  unanimousBet:{odds:2.4,amount:100,betResult:"hit",customGames:[
+    {matchup:"LG vs 두산",pick:"두산",result:"두산"},
+    {matchup:"삼성 vs 롯데",pick:"삼성",result:"삼성"},
   ]},
   allFiveBets:[
-    {label:"도전경기",odds:11.3,amount:100,betResult:"pending",pickLabels:["한화","KIA","두산","SSG","삼성"]},
-    {label:"도전경기(-)",odds:6.4,amount:100,betResult:"pending",pickLabels:["한화","KIA","SSG","삼성"],excludedGame:"LG vs 두산",note:"LG vs 두산 신뢰도 최저(57.0%) 제외 후 4경기로 배당 계산"},
-    {label:"도전경기(양방)",odds:11.2,amount:100,betResult:"pending",pickLabels:["한화","KIA","LG","SSG","삼성"],bothGame:"LG vs 두산",bothPick:"LG"},
+    {label:"도전경기",odds:11.3,amount:100,betResult:"miss",pickLabels:["한화","KIA","두산","SSG","삼성"],note:"두산·삼성 적중, 한화·KIA·SSG 미스로 조합 전체 미스"},
+    {label:"도전경기(-)",odds:6.4,amount:100,betResult:"miss",pickLabels:["한화","KIA","SSG","삼성"],excludedGame:"LG vs 두산",note:"LG vs 두산 신뢰도 최저(57.0%) 제외 후 4경기로 배당 계산. 한화·KIA·SSG 미스"},
+    {label:"도전경기(양방)",odds:11.2,amount:100,betResult:"miss",pickLabels:["한화","KIA","LG","SSG","삼성"],bothGame:"LG vs 두산",bothPick:"LG",note:"LG로 뒤집은 다리도 두산이 이겨서 미스"},
   ],
   singleBets:[
-    {matchup:"한화 vs KT",pick:"한화",odds:1.73,amount:100,betResult:"pending",result:null},
-    {matchup:"KIA vs NC",pick:"KIA",odds:1.64,amount:100,betResult:"pending",result:null},
-    {matchup:"LG vs 두산",pick:"두산",odds:1.77,amount:100,betResult:"pending",result:null},
-    {matchup:"SSG vs 키움",pick:"SSG",odds:1.67,amount:100,betResult:"pending",result:null},
-    {matchup:"삼성 vs 롯데",pick:"삼성",odds:1.34,amount:100,betResult:"pending",result:null},
+    {matchup:"한화 vs KT",pick:"한화",odds:1.73,amount:100,betResult:"miss",result:"KT"},
+    {matchup:"KIA vs NC",pick:"KIA",odds:1.64,amount:100,betResult:"miss",result:"NC"},
+    {matchup:"LG vs 두산",pick:"두산",odds:1.77,amount:100,betResult:"hit",result:"두산"},
+    {matchup:"SSG vs 키움",pick:"SSG",odds:1.67,amount:100,betResult:"miss",result:"키움"},
+    {matchup:"삼성 vs 롯데",pick:"삼성",odds:1.34,amount:100,betResult:"hit",result:"삼성"},
   ]},
 ];
 
