@@ -1050,6 +1050,24 @@ const DATA=[
     {matchup:"한화 vs KT",pick:"KT",odds:1.74,amount:100,betResult:"hit",result:"KT"},
     {matchup:"KIA vs NC",pick:"NC",odds:1.53,amount:100,betResult:"cancel",result:"취소"},
   ]},
+  {date:"2026-08-04",games:[
+    {matchup:"한화 vs 삼성",ai1:"삼성",ai1conf:61.8,ai2:"한화",ai2conf:55.0,ai3:"한화",ai3conf:61.0,pick:"한화",result:null},
+    {matchup:"키움 vs 롯데",ai1:"롯데",ai1conf:58.7,ai2:"롯데",ai2conf:56.0,ai3:"롯데",ai3conf:64.0,pick:"롯데",result:null},
+    {matchup:"LG vs SSG",ai1:"LG",ai1conf:54.2,ai2:"SSG",ai2conf:56.0,ai3:"LG",ai3conf:66.0,pick:"LG",result:null},
+  ],
+  unanimousBet:{odds:1.48,amount:100,betResult:"pending",customGames:[
+    {matchup:"키움 vs 롯데",pick:"롯데",result:null},
+  ]},
+  allFiveBets:[
+    {label:"도전경기",odds:3.9,amount:100,betResult:"pending",pickLabels:["한화","롯데","LG"],note:"오늘은 KT vs KIA·NC vs 두산 2경기 취소로 3경기만 발매돼 3경기 조합으로 계산"},
+    {label:"도전경기(-)",odds:2.1,amount:100,betResult:"pending",pickLabels:["롯데","LG"],excludedGame:"한화 vs 삼성",note:"한화 vs 삼성 신뢰도 최저(58.0%) 제외 후 2경기로 배당 계산"},
+    {label:"도전경기(양방)",odds:3.4,amount:100,betResult:"pending",pickLabels:["삼성","롯데","LG"],bothGame:"한화 vs 삼성",bothPick:"삼성"},
+  ],
+  singleBets:[
+    {matchup:"한화 vs 삼성",pick:"한화",odds:1.89,amount:100,betResult:"pending",result:null},
+    {matchup:"키움 vs 롯데",pick:"롯데",odds:1.48,amount:100,betResult:"pending",result:null},
+    {matchup:"LG vs SSG",pick:"LG",odds:1.37,amount:100,betResult:"pending",result:null},
+  ]},
 ];
 
 function isUnanimous(g){return g.ai1===g.ai2&&g.ai2===g.ai3;}
