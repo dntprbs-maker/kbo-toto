@@ -346,9 +346,9 @@ canvas{width:100%!important;}
     <div class="bet-content-panel" id="panel-allfive">
   <div class="bet-pc-header">⚡ 도전경기 내역</div>
   <div id="allfive-subtabs" style="display:flex;gap:4px;margin-bottom:12px;background:var(--bg);border-radius:10px;padding:4px;">
-    <div id="btn-af-minus" class="af-subtab active-af-minus" onclick="filterAllfive('도전경기(-)')" style="flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">➖ 도전경기(-)</div>
-    <div id="btn-af-main"  class="af-subtab" onclick="filterAllfive('도전경기')"   style="flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">⚡ 도전경기</div>
-    <div id="btn-af-both"  class="af-subtab" onclick="filterAllfive('도전경기(양방)')" style="flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">↔️ 도전경기(양방)</div>
+    <div id="btn-af-minus" class="af-subtab" onclick="filterAllfive('도전경기(-)')" style="display:none;flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">➖ 도전경기(-)</div>
+    <div id="btn-af-main"  class="af-subtab active-af-main" onclick="filterAllfive('도전경기')"   style="flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">⚡ 도전경기</div>
+    <div id="btn-af-both"  class="af-subtab" onclick="filterAllfive('도전경기(양방)')" style="display:none;flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">↔️ 도전경기(양방)</div>
   </div>
   <div id="allfive-list"></div>
 </div>
@@ -1388,7 +1388,7 @@ function renderAccuracy(){
     {name:'↔️ 도전경기(양방)',key:'af_both',hit:afBoth.filter(b=>b.betResult==='hit').length,total:afBoth.length,rate:afBoth.length?Math.round(afBoth.filter(b=>b.betResult==='hit').length/afBoth.length*100):0,roi:afBothRoi,sub:`${afBoth.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afBoth.length}회`},
     {name:'⚡↔️ 도전경기+양방',key:'af_combo',hit:afCombo.filter(b=>b.betResult==='hit').length,total:afCombo.length,rate:afCombo.length?Math.round(afCombo.filter(b=>b.betResult==='hit').length/afCombo.length*100):0,roi:afComboRoi,sub:`${afCombo.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afCombo.length}회`},
     {name:'1️⃣ 단독베팅',key:'single',hit:sHit,total:sAll.length,rate:sRate,roi:sRoi,sub:`${sHit}회 적중 / 총 ${sAll.length}회 (${sDayCount}일)`},
-  ].map(r=>`<div class="rate-bar-wrap" onclick="showAccDetail('${r.key}')" style="cursor:pointer;">
+  ].filter(r=>!['af_minus','af_both','af_combo'].includes(r.key)).map(r=>`<div class="rate-bar-wrap" onclick="showAccDetail('${r.key}')" style="cursor:pointer;">
     <div class="rate-bar-label">
       <span class="rate-bar-name">${r.name}</span>
       <div style="display:flex;align-items:center;gap:8px;">
@@ -1996,7 +1996,7 @@ function renderBetting(){
   document.getElementById('single-list').innerHTML=sHtml||'<div class="empty">📝 단독베팅 내역이 없습니다.</div>';
 }
 
-let currentAfTab='도전경기(-)';
+let currentAfTab='도전경기';
 
 function filterAllfive(label){
   currentAfTab=label;
