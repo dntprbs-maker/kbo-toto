@@ -225,6 +225,9 @@ canvas{width:100%!important;}
   .af-subtab.active-af-minus{color:#06d6a0;background:rgba(6,214,160,0.13);border-color:#06d6a0;}
   .af-subtab.active-af-main{color:var(--gold2);background:rgba(245,166,35,0.13);border-color:var(--gold);}
   .af-subtab.active-af-both{color:#a29bfe;background:rgba(162,155,254,0.13);border-color:#a29bfe;}
+  .af-subtab.active-af-ban{color:#4dabf7;background:rgba(77,171,247,0.13);border-color:#4dabf7;}
+  .af-subtab.active-af-byul{color:#ff8787;background:rgba(255,135,135,0.13);border-color:#ff8787;}
+  .af-subtab.active-af-cho{color:#69db7c;background:rgba(105,219,124,0.13);border-color:#69db7c;}
 </style>
 </head>
 <body>
@@ -345,10 +348,13 @@ canvas{width:100%!important;}
     <div class="bet-content-panel active" id="panel-unanimous"><div class="bet-pc-header">🎯 만장일치 내역</div><div id="unanimous-list"></div></div>
     <div class="bet-content-panel" id="panel-allfive">
   <div class="bet-pc-header">⚡ 도전경기 내역</div>
-  <div id="allfive-subtabs" style="display:flex;gap:4px;margin-bottom:12px;background:var(--bg);border-radius:10px;padding:4px;">
+  <div id="allfive-subtabs" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;background:var(--bg);border-radius:10px;padding:4px;">
     <div id="btn-af-minus" class="af-subtab" onclick="filterAllfive('도전경기(-)')" style="display:none;flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">➖ 도전경기(-)</div>
     <div id="btn-af-main"  class="af-subtab active-af-main" onclick="filterAllfive('도전경기')"   style="flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">⚡ 도전경기</div>
     <div id="btn-af-both"  class="af-subtab" onclick="filterAllfive('도전경기(양방)')" style="display:none;flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">↔️ 도전경기(양방)</div>
+    <div id="btn-af-ban"  class="af-subtab" onclick="filterAllfive('도전경기(반짝이)')" style="flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">✨ 반짝이</div>
+    <div id="btn-af-byul"  class="af-subtab" onclick="filterAllfive('도전경기(별이)')" style="flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">⭐ 별이</div>
+    <div id="btn-af-cho"  class="af-subtab" onclick="filterAllfive('도전경기(초롱이)')" style="flex:1;padding:8px 4px;text-align:center;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">🏮 초롱이</div>
   </div>
   <div id="allfive-list"></div>
 </div>
@@ -1272,7 +1278,7 @@ function showAccDetail(type){
   document.getElementById('acc-main').style.display='none';
   document.getElementById('acc-detail').style.display='block';
 
-  const titleMap={unanimous:'🎯 만장일치 날짜별 기록',allfive:'⚡ 도전경기 날짜별 기록',af_minus:'➖ 도전경기(-) 날짜별 기록',af_main:'⚡ 도전경기 날짜별 기록',af_both:'↔️ 도전경기(양방) 날짜별 기록',af_combo:'⚡↔️ 도전경기+양방 날짜별 기록',single:'1️⃣ 단독베팅 날짜별 기록',all:'📋 전체 날짜별 기록'};
+  const titleMap={unanimous:'🎯 만장일치 날짜별 기록',allfive:'⚡ 도전경기 날짜별 기록',af_minus:'➖ 도전경기(-) 날짜별 기록',af_main:'⚡ 도전경기 날짜별 기록',af_both:'↔️ 도전경기(양방) 날짜별 기록',af_combo:'⚡↔️ 도전경기+양방 날짜별 기록',af_ban:'✨ 도전경기(반짝이) 날짜별 기록',af_byul:'⭐ 도전경기(별이) 날짜별 기록',af_cho:'🏮 도전경기(초롱이) 날짜별 기록',single:'1️⃣ 단독베팅 날짜별 기록',all:'📋 전체 날짜별 기록'};
   document.getElementById('acc-detail-title').textContent=titleMap[type]||'날짜별 기록';
 
   const done=DATA.filter(d=>d.unanimousBet.betResult!=='pending');
@@ -1307,6 +1313,21 @@ function showAccDetail(type){
     if(type==='af_both'){
       (d.allFiveBets||[]).filter(b=>b.label==='도전경기(양방)'&&b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
         rows.push({date:d.date.slice(5),label:'↔️ 도전경기(양방)',st:item.betResult,odds:item.odds,profit:getProfit(item)});
+      });
+    }
+    if(type==='af_ban'){
+      (d.allFiveBets||[]).filter(b=>b.label==='도전경기(반짝이)'&&b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
+        rows.push({date:d.date.slice(5),label:'✨ 도전경기(반짝이)',st:item.betResult,odds:item.odds,profit:getProfit(item)});
+      });
+    }
+    if(type==='af_byul'){
+      (d.allFiveBets||[]).filter(b=>b.label==='도전경기(별이)'&&b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
+        rows.push({date:d.date.slice(5),label:'⭐ 도전경기(별이)',st:item.betResult,odds:item.odds,profit:getProfit(item)});
+      });
+    }
+    if(type==='af_cho'){
+      (d.allFiveBets||[]).filter(b=>b.label==='도전경기(초롱이)'&&b.betResult!=='cancel'&&b.betResult!=='pending').forEach(item=>{
+        rows.push({date:d.date.slice(5),label:'🏮 도전경기(초롱이)',st:item.betResult,odds:item.odds,profit:getProfit(item)});
       });
     }
     if(type==='af_combo'){
@@ -1396,11 +1417,15 @@ function renderAccuracy(){
   const afMinus =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기(-)'  &&b.betResult!=='cancel'&&b.betResult!=='pending'));
   const afMain  =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기'     &&b.betResult!=='cancel'&&b.betResult!=='pending'));
   const afBoth  =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기(양방)'&&b.betResult!=='cancel'&&b.betResult!=='pending'));
-  const a5All=[...afMinus,...afMain,...afBoth,...done.flatMap(d=>(d.allFiveBets||[]).filter(b=>{const l=b.label||'';return !['도전경기(-)','도전경기','도전경기(양방)'].includes(l)&&b.betResult!=='cancel'&&b.betResult!=='pending';}))];
+  const afBan   =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기(반짝이)'&&b.betResult!=='cancel'&&b.betResult!=='pending'));
+  const afByul  =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기(별이)'&&b.betResult!=='cancel'&&b.betResult!=='pending'));
+  const afCho   =done.flatMap(d=>(d.allFiveBets||[]).filter(b=>b.label==='도전경기(초롱이)'&&b.betResult!=='cancel'&&b.betResult!=='pending'));
+  const a5All=[...afMinus,...afMain,...afBoth,...afBan,...afByul,...afCho,...done.flatMap(d=>(d.allFiveBets||[]).filter(b=>{const l=b.label||'';return !['도전경기(-)','도전경기','도전경기(양방)','도전경기(반짝이)','도전경기(별이)','도전경기(초롱이)'].includes(l)&&b.betResult!=='cancel'&&b.betResult!=='pending';}))];
   const a5Hit=a5All.filter(b=>b.betResult==='hit').length;
   const a5Rate=a5All.length?Math.round(a5Hit/a5All.length*100):0;
   function calcSubRoi(arr){const inv=arr.reduce((s,b)=>s+b.amount,0);const prf=arr.reduce((s,b)=>s+(getProfit(b)||0),0);return inv>0?(prf/inv*100).toFixed(1):null;}
   const afMinusRoi=calcSubRoi(afMinus);const afMainRoi=calcSubRoi(afMain);const afBothRoi=calcSubRoi(afBoth);
+  const afBanRoi=calcSubRoi(afBan);const afByulRoi=calcSubRoi(afByul);const afChoRoi=calcSubRoi(afCho);
   const afCombo=[...afMain,...afBoth];const afComboRoi=calcSubRoi(afCombo);
 
   // 단독 (기존 방식 유지)
@@ -1431,6 +1456,9 @@ function renderAccuracy(){
     {name:'🎯 만장일치',key:'unanimous',hit:uHit,total:uBets.length,rate:uRate,roi:uRoi,sub:`${uHit}회 적중 / 총 ${uBets.length}회`},
     {name:'➖ 도전경기(-)',key:'af_minus',hit:afMinus.filter(b=>b.betResult==='hit').length,total:afMinus.length,rate:afMinus.length?Math.round(afMinus.filter(b=>b.betResult==='hit').length/afMinus.length*100):0,roi:afMinusRoi,sub:`${afMinus.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afMinus.length}회`},
     {name:'⚡ 도전경기',key:'af_main',hit:afMain.filter(b=>b.betResult==='hit').length,total:afMain.length,rate:afMain.length?Math.round(afMain.filter(b=>b.betResult==='hit').length/afMain.length*100):0,roi:afMainRoi,sub:`${afMain.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afMain.length}회`},
+    {name:'✨ 도전경기(반짝이)',key:'af_ban',hit:afBan.filter(b=>b.betResult==='hit').length,total:afBan.length,rate:afBan.length?Math.round(afBan.filter(b=>b.betResult==='hit').length/afBan.length*100):0,roi:afBanRoi,sub:`${afBan.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afBan.length}회`},
+    {name:'⭐ 도전경기(별이)',key:'af_byul',hit:afByul.filter(b=>b.betResult==='hit').length,total:afByul.length,rate:afByul.length?Math.round(afByul.filter(b=>b.betResult==='hit').length/afByul.length*100):0,roi:afByulRoi,sub:`${afByul.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afByul.length}회`},
+    {name:'🏮 도전경기(초롱이)',key:'af_cho',hit:afCho.filter(b=>b.betResult==='hit').length,total:afCho.length,rate:afCho.length?Math.round(afCho.filter(b=>b.betResult==='hit').length/afCho.length*100):0,roi:afChoRoi,sub:`${afCho.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afCho.length}회`},
     {name:'↔️ 도전경기(양방)',key:'af_both',hit:afBoth.filter(b=>b.betResult==='hit').length,total:afBoth.length,rate:afBoth.length?Math.round(afBoth.filter(b=>b.betResult==='hit').length/afBoth.length*100):0,roi:afBothRoi,sub:`${afBoth.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afBoth.length}회`},
     {name:'⚡↔️ 도전경기+양방',key:'af_combo',hit:afCombo.filter(b=>b.betResult==='hit').length,total:afCombo.length,rate:afCombo.length?Math.round(afCombo.filter(b=>b.betResult==='hit').length/afCombo.length*100):0,roi:afComboRoi,sub:`${afCombo.filter(b=>b.betResult==='hit').length}회 적중 / 총 ${afCombo.length}회`},
     {name:'1️⃣ 단독베팅',key:'single',hit:sHit,total:sAll.length,rate:sRate,roi:sRoi,sub:`${sHit}회 적중 / 총 ${sAll.length}회 (${sDayCount}일)`},
@@ -2046,7 +2074,7 @@ let currentAfTab='도전경기';
 
 function filterAllfive(label){
   currentAfTab=label;
-  const map={'도전경기(-)':'minus','도전경기':'main','도전경기(양방)':'both'};
+  const map={'도전경기(-)':'minus','도전경기':'main','도전경기(양방)':'both','도전경기(반짝이)':'ban','도전경기(별이)':'byul','도전경기(초롱이)':'cho'};
   document.querySelectorAll('.af-subtab').forEach(el=>{
     el.className='af-subtab';
   });
@@ -2064,7 +2092,7 @@ function filterBetType(type){
 }
 
 function renderAllfiveList(){
-  const labelColorMap={'도전경기(-)':'#06d6a0','도전경기':'#f5a623','도전경기(양방)':'#a29bfe'};
+  const labelColorMap={'도전경기(-)':'#06d6a0','도전경기':'#f5a623','도전경기(양방)':'#a29bfe','도전경기(반짝이)':'#4dabf7','도전경기(별이)':'#ff8787','도전경기(초롱이)':'#69db7c'};
   const color=labelColorMap[currentAfTab]||'#f5a623';
   const html=[...DATA.keys()].sort((a,b)=>DATA[b].date.localeCompare(DATA[a].date)).map(i=>{
     const d=DATA[i];
