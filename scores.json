@@ -971,6 +971,46 @@
           "winner": "키움"
         }
       ]
+    },
+    {
+      "date": "2026-08-16",
+      "scores": [
+        {
+          "matchup": "SSG vs LG",
+          "score": "6-0"
+        },
+        {
+          "matchup": "두산 vs KIA",
+          "score": "1-2"
+        },
+        {
+          "matchup": "키움 vs KT",
+          "score": "2-6"
+        }
+      ],
+      "odds": [
+        {
+          "home": "LG",
+          "ho": 1.5,
+          "away": "SSG",
+          "ao": 2.13,
+          "winner": "SSG"
+        },
+        {
+          "home": "KIA",
+          "ho": 1.75,
+          "away": "두산",
+          "ao": 1.77,
+          "winner": "KIA"
+        },
+        {
+          "home": "KT",
+          "ho": 1.21,
+          "away": "키움",
+          "ao": 3.23,
+          "winner": "KT"
+        }
+      ]
     }
   ]
 }
