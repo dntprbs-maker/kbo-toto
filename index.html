@@ -1147,6 +1147,32 @@ const DATA=[
     {matchup:"두산 vs KIA",pick:"두산",odds:1.59,amount:100,betResult:"hit",result:"두산"},
     {matchup:"키움 vs KT",pick:"KT",odds:1.20,amount:100,betResult:"hit",result:"KT"},
   ]},
+  {date:"2026-08-15",games:[
+    {matchup:"SSG vs LG",ai1:"LG",ai1conf:61.4,ai2:"LG",ai2conf:66.0,ai3:"LG",ai3conf:69.0,pick:"LG",result:"LG"},
+    {matchup:"한화 vs 삼성",ai1:"삼성",ai1conf:57.8,ai2:"삼성",ai2conf:58.0,ai3:"삼성",ai3conf:60.0,pick:"삼성",result:"삼성"},
+    {matchup:"NC vs 롯데",ai1:"롯데",ai1conf:63.5,ai2:"롯데",ai2conf:52.0,ai3:"롯데",ai3conf:66.0,pick:"롯데",result:"롯데"},
+    {matchup:"두산 vs KIA",ai1:"KIA",ai1conf:56.2,ai2:"두산",ai2conf:55.0,ai3:"KIA",ai3conf:64.0,pick:"KIA",result:"KIA"},
+    {matchup:"키움 vs KT",ai1:"KT",ai1conf:66.7,ai2:"KT",ai2conf:52.0,ai3:"KT",ai3conf:63.0,pick:"KT",result:"키움"},
+  ],
+  unanimousBet:{odds:5.2,amount:100,betResult:"miss",customGames:[
+    {matchup:"SSG vs LG",pick:"LG",result:"LG"},
+    {matchup:"한화 vs 삼성",pick:"삼성",result:"삼성"},
+    {matchup:"NC vs 롯데",pick:"롯데",result:"롯데"},
+    {matchup:"키움 vs KT",pick:"KT",result:"키움"},
+  ]},
+  allFiveBets:[
+    {label:"도전경기",odds:8.1,amount:100,betResult:"miss",pickLabels:["LG","삼성","롯데","KIA","KT"],note:"LG·삼성·롯데·KIA 적중, 키움-KT 경기만 미스라 조합 전체 미스"},
+    {label:"도전경기(반짝이)",odds:8.1,amount:100,betResult:"miss",pickLabels:["LG","삼성","롯데","KIA","KT"],note:"LG·삼성·롯데·KIA 적중, 키움-KT 경기만 미스라 조합 전체 미스"},
+    {label:"도전경기(별이)",odds:10.3,amount:100,betResult:"miss",pickLabels:["LG","삼성","롯데","두산","KT"],note:"LG·삼성·롯데 적중, 두산-KIA·키움-KT 2경기 미스라 조합 전체 미스"},
+    {label:"도전경기(초롱이)",odds:8.1,amount:100,betResult:"miss",pickLabels:["LG","삼성","롯데","KIA","KT"],note:"LG·삼성·롯데·KIA 적중, 키움-KT 경기만 미스라 조합 전체 미스"},
+  ],
+  singleBets:[
+    {matchup:"SSG vs LG",pick:"LG",odds:1.50,amount:100,betResult:"hit",result:"LG"},
+    {matchup:"한화 vs 삼성",pick:"삼성",odds:1.51,amount:100,betResult:"hit",result:"삼성"},
+    {matchup:"NC vs 롯데",pick:"롯데",odds:1.66,amount:100,betResult:"hit",result:"롯데"},
+    {matchup:"두산 vs KIA",pick:"KIA",odds:1.57,amount:100,betResult:"hit",result:"KIA"},
+    {matchup:"키움 vs KT",pick:"KT",odds:1.37,amount:100,betResult:"miss",result:"키움"},
+  ]},
 ];
 
 function isUnanimous(g){return g.ai1===g.ai2&&g.ai2===g.ai3;}
