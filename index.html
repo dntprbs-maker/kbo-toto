@@ -1370,22 +1370,22 @@ const DATA=[
     {matchup:"LG vs 롯데",pick:"롯데",odds:2.24,amount:100,betResult:"cancel",result:"취소"},
   ]},
 {date:"2026-09-01",games:[
-    {matchup:"LG vs 두산",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG"},
-    {matchup:"SSG vs 키움",ai1:"키움",ai2:"키움",ai3:"키움",pick:"키움"},
-    {matchup:"한화 vs KT",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT"},
-    {matchup:"롯데 vs 삼성",ai1:"롯데",ai2:"롯데",ai3:"롯데",pick:"롯데"},
-    {matchup:"KIA vs NC",ai1:"KIA",ai2:"KIA",ai3:"KIA",pick:"KIA"},
+    {matchup:"LG vs 두산",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG",result:"LG"},
+    {matchup:"SSG vs 키움",ai1:"키움",ai2:"키움",ai3:"키움",pick:"키움",result:"SSG"},
+    {matchup:"한화 vs KT",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT",result:"KT"},
+    {matchup:"롯데 vs 삼성",ai1:"롯데",ai2:"롯데",ai3:"롯데",pick:"롯데",result:"삼성"},
+    {matchup:"KIA vs NC",ai1:"KIA",ai2:"KIA",ai3:"KIA",pick:"KIA",result:"NC"},
   ],
   unanimousBet:{odds:0,amount:0,betResult:"cancel",customGames:[]},
   allFiveBets:[
-    {label:"도전경기",odds:16.1,amount:100,betResult:"pending",pickLabels:["LG","키움","KT","롯데","KIA"]},
+    {label:"도전경기",odds:16.1,amount:100,betResult:"miss",pickLabels:["LG","키움","KT","롯데","KIA"],note:"SSG(키움 미스)·삼성(롯데 미스)·NC(KIA 미스) 3경기 틀려서 조합 전체 미스, LG·KT만 적중"},
   ],
   singleBets:[
-    {matchup:"LG vs 두산",pick:"LG",odds:1.73,amount:100,betResult:"pending"},
-    {matchup:"SSG vs 키움",pick:"키움",odds:1.7,amount:100,betResult:"pending"},
-    {matchup:"한화 vs KT",pick:"KT",odds:1.57,amount:100,betResult:"pending"},
-    {matchup:"롯데 vs 삼성",pick:"롯데",odds:2.15,amount:100,betResult:"pending"},
-    {matchup:"KIA vs NC",pick:"KIA",odds:1.62,amount:100,betResult:"pending"},
+    {matchup:"LG vs 두산",pick:"LG",odds:1.73,amount:100,betResult:"hit",result:"LG"},
+    {matchup:"SSG vs 키움",pick:"키움",odds:1.7,amount:100,betResult:"miss",result:"SSG"},
+    {matchup:"한화 vs KT",pick:"KT",odds:1.57,amount:100,betResult:"hit",result:"KT"},
+    {matchup:"롯데 vs 삼성",pick:"롯데",odds:2.15,amount:100,betResult:"miss",result:"삼성"},
+    {matchup:"KIA vs NC",pick:"KIA",odds:1.62,amount:100,betResult:"miss",result:"NC"},
   ]},
 ];
 
