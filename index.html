@@ -1388,22 +1388,22 @@ const DATA=[
     {matchup:"KIA vs NC",pick:"KIA",odds:1.62,amount:100,betResult:"miss",result:"NC"},
   ]},
 {date:"2026-09-03",games:[
-    {matchup:"LG vs 두산",ai1:"두산",ai2:"두산",ai3:"두산",pick:"두산"},
-    {matchup:"SSG vs 키움",ai1:"SSG",ai2:"SSG",ai3:"SSG",pick:"SSG"},
-    {matchup:"한화 vs KT",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT"},
-    {matchup:"롯데 vs 삼성",ai1:"삼성",ai2:"삼성",ai3:"삼성",pick:"삼성"},
-    {matchup:"KIA vs NC",ai1:"NC",ai2:"NC",ai3:"NC",pick:"NC"},
+    {matchup:"LG vs 두산",ai1:"두산",ai2:"두산",ai3:"두산",pick:"두산",result:"LG"},
+    {matchup:"SSG vs 키움",ai1:"SSG",ai2:"SSG",ai3:"SSG",pick:"SSG",result:"키움"},
+    {matchup:"한화 vs KT",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT",result:"KT"},
+    {matchup:"롯데 vs 삼성",ai1:"삼성",ai2:"삼성",ai3:"삼성",pick:"삼성",result:"롯데"},
+    {matchup:"KIA vs NC",ai1:"NC",ai2:"NC",ai3:"NC",pick:"NC",result:"취소"},
   ],
   unanimousBet:{odds:0,amount:0,betResult:"cancel",customGames:[]},
   allFiveBets:[
-    {label:"도전경기",odds:8.4,amount:100,betResult:"pending",pickLabels:["두산","SSG","KT","삼성","NC"]},
+    {label:"도전경기",odds:4.2,amount:100,betResult:"miss",pickLabels:["두산","SSG","KT","삼성","NC"],note:"KIA vs NC 취소, 나머지 4경기만 배당 재계산. 두산·SSG·삼성 3경기 미스로 조합 전체 미스, KT만 적중"},
   ],
   singleBets:[
-    {matchup:"LG vs 두산",pick:"두산",odds:1.41,amount:100,betResult:"pending"},
-    {matchup:"SSG vs 키움",pick:"SSG",odds:1.53,amount:100,betResult:"pending"},
-    {matchup:"한화 vs KT",pick:"KT",odds:1.44,amount:100,betResult:"pending"},
-    {matchup:"롯데 vs 삼성",pick:"삼성",odds:1.35,amount:100,betResult:"pending"},
-    {matchup:"KIA vs NC",pick:"NC",odds:1.99,amount:100,betResult:"pending"},
+    {matchup:"LG vs 두산",pick:"두산",odds:1.41,amount:100,betResult:"miss",result:"LG"},
+    {matchup:"SSG vs 키움",pick:"SSG",odds:1.53,amount:100,betResult:"miss",result:"키움"},
+    {matchup:"한화 vs KT",pick:"KT",odds:1.44,amount:100,betResult:"hit",result:"KT"},
+    {matchup:"롯데 vs 삼성",pick:"삼성",odds:1.35,amount:100,betResult:"miss",result:"롯데"},
+    {matchup:"KIA vs NC",pick:"NC",odds:1.99,amount:100,betResult:"cancel",result:"취소"},
   ]},
 ];
 
