@@ -1424,22 +1424,22 @@ const DATA=[
     {matchup:"한화 vs 롯데",pick:"롯데",odds:1.64,amount:100,betResult:"miss",result:"한화"},
   ]},
 {date:"2026-09-05",games:[
-    {matchup:"삼성 vs LG",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG"},
-    {matchup:"NC vs 키움",ai1:"NC",ai2:"NC",ai3:"NC",pick:"NC"},
-    {matchup:"두산 vs SSG",ai1:"두산",ai2:"두산",ai3:"두산",pick:"두산"},
-    {matchup:"KT vs KIA",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT"},
-    {matchup:"한화 vs 롯데",ai1:"한화",ai2:"한화",ai3:"한화",pick:"한화"},
+    {matchup:"삼성 vs LG",ai1:"LG",ai2:"LG",ai3:"LG",pick:"LG",result:"삼성"},
+    {matchup:"NC vs 키움",ai1:"NC",ai2:"NC",ai3:"NC",pick:"NC",result:"NC"},
+    {matchup:"두산 vs SSG",ai1:"두산",ai2:"두산",ai3:"두산",pick:"두산",result:"SSG"},
+    {matchup:"KT vs KIA",ai1:"KT",ai2:"KT",ai3:"KT",pick:"KT",result:"KIA"},
+    {matchup:"한화 vs 롯데",ai1:"한화",ai2:"한화",ai3:"한화",pick:"한화",result:"한화"},
   ],
   unanimousBet:{odds:0,amount:0,betResult:"cancel",customGames:[]},
   allFiveBets:[
-    {label:"도전경기",odds:11.7,amount:100,betResult:"pending",pickLabels:["LG","NC","두산","KT","한화"]},
+    {label:"도전경기",odds:11.7,amount:100,betResult:"miss",pickLabels:["LG","NC","두산","KT","한화"],note:"LG(삼성 승)·두산(SSG 승)·KT(KIA 승) 3경기 미스로 조합 전체 미스, NC·한화는 적중"},
   ],
   singleBets:[
-    {matchup:"삼성 vs LG",pick:"LG",odds:1.53,amount:100,betResult:"pending"},
-    {matchup:"NC vs 키움",pick:"NC",odds:1.49,amount:100,betResult:"pending"},
-    {matchup:"두산 vs SSG",pick:"두산",odds:1.67,amount:100,betResult:"pending"},
-    {matchup:"KT vs KIA",pick:"KT",odds:1.66,amount:100,betResult:"pending"},
-    {matchup:"한화 vs 롯데",pick:"한화",odds:1.85,amount:100,betResult:"pending"},
+    {matchup:"삼성 vs LG",pick:"LG",odds:1.53,amount:100,betResult:"miss",result:"삼성"},
+    {matchup:"NC vs 키움",pick:"NC",odds:1.49,amount:100,betResult:"hit",result:"NC"},
+    {matchup:"두산 vs SSG",pick:"두산",odds:1.67,amount:100,betResult:"miss",result:"SSG"},
+    {matchup:"KT vs KIA",pick:"KT",odds:1.66,amount:100,betResult:"miss",result:"KIA"},
+    {matchup:"한화 vs 롯데",pick:"한화",odds:1.85,amount:100,betResult:"hit",result:"한화"},
   ]},
 ];
 
